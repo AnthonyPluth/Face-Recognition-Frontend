@@ -1,0 +1,22 @@
+stages:
+  - test
+
+test_python:
+  stage: test
+  script:
+  # this configures Django application to use attached postgres database that is run on `postgres` host
+  - apt-get update -qy
+  - apt-get install -y python-dev python-pip
+  - cd api
+  - pip install -e '.[testing]'
+  # - pip install -r requirements.txt
+  - coverage run -m pytest
+  - coverage report -m
+
+# test_react:
+#   stage: test
+#   script:
+#   - apt-get update -qy
+#   - apt-get install -y python-dev python-pip
+#   - pip install -r requirements.txt
+#   - python manage.py test
