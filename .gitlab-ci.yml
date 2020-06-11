@@ -3,8 +3,7 @@ stages:
 
 test_react:
   stage: test
+  before_script:
+    - yarn install
   script:
-  - yarn install
-#   - apt-get install -y python-dev python-pip
-#   - pip install -r requirements.txt
-#   - python manage.py test
+    - yarn test
