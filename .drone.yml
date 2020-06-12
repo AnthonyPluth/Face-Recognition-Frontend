@@ -1,9 +1,3 @@
-## 👋 “Hey” from the Praxis team
-## PRAXIS DEFAULT PIPELINES
-## tell drone to build and package Praxis output alongside an nginx webserver within a Docker image.
-## learn more at praxis.target.com/guides/ci-cd and praxis.target.com/guides/hosting
-
-# SETUP - reuse step configuration (thanks @NicholasCappo)
 node-image: &node-image
   image: node:12.14.1
 

@@ -6,4 +6,4 @@ COPY build /usr/share/nginx/html
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 WORKDIR /usr/share/nginx/html
 # expose our port
-EXPOSE 80
+EXPOSE 3000

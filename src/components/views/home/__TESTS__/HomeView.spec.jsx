@@ -1,8 +1,8 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import { render, waitForElement } from "@testing-library/react";
-import { HomeView } from "../HomeView";
-import { MockMemoryRouter } from "../../../../utils/testUtils";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
+import { render, screen } from "@testing-library/react";
+import HomeView from "../HomeView";
 import { getIdentityFromSnapshot } from "../../../../api/faceRecApi";
 
 jest.mock("../../../../api/faceRecApi");
@@ -16,21 +16,27 @@ describe("HomeView", () => {
     });
   });
 
-  // it("should render homeView", async () => {
-  //   const { getByTestId } = ReactDOM.render(
-  //     <MockMemoryRouter>
-  //       <HomeView />
-  //     </MockMemoryRouter>
-  //   );
-  //   await waitForElement(() => getByTestId("homeView"));
-  // });
-
-  it("should fail if backend isn't running", async () => {
+  it("should show offline alert if no response is received from api", async () => {
     mockApi.mockReturnValue({});
-    const { getByTestId } = render(<HomeView />);
-    await waitForElement(() => getByTestId("homeView"));
-    expect(getByTestId("user_name").textContent).toBe(
-      `Name: Face not detected`
+
+    const { getByTestId } = render(
+      <Router history={createMemoryHistory()}>
+        <HomeView />
+      </Router>
     );
+    await screen.findByTestId("homeView");
+    expect(getByTestId("offlineAlert"));
+  });
+
+  it("should show ui if api is online", async () => {
+    const { getByTestId } = render(
+      <Router history={createMemoryHistory()}>
+        <HomeView />
+      </Router>
+    );
+    await screen.findByTestId("faceRecognitionCard");
+    expect(getByTestId("user_name").innerHTML).toEqual("Name: Test User");
   });
 });
+
+it("should throw error when registering new user if name isn't provided", async () => {});

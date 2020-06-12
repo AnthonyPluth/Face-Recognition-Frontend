@@ -13,6 +13,7 @@ import CardActions from "@material-ui/core/CardActions";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 const useStyles = (theme) => ({
   root: {
@@ -60,18 +61,25 @@ class HomeView extends Component {
 
   getSnapshot = async () => {
     const currScreenshot = this.refs.webcam.getScreenshot();
+
     if (this.state.isRecording) {
       await recordSnapshot(this.state.newUserName, currScreenshot);
     } else {
       const identity = await getIdentityFromSnapshot(currScreenshot);
-      this.setState({
-        image: identity.framed_image,
-        name: identity.name ? identity.name : "Face not detected",
-        confidence: (identity.confidence / 100).toLocaleString(undefined, {
-          style: "percent",
-          minimumFractionDigits: 2,
-        }),
-      });
+      console.log(identity);
+      if (identity) {
+        this.setState({
+          apiOffline: false,
+          image: identity.framed_image,
+          name: identity.name ? identity.name : "Face not detected",
+          confidence: (identity.confidence / 100).toLocaleString(undefined, {
+            style: "percent",
+            minimumFractionDigits: 2,
+          }),
+        });
+      } else {
+        this.setState({ apiOffline: true });
+      }
     }
   };
 
@@ -80,49 +88,63 @@ class HomeView extends Component {
 
     return (
       <div className={classes.root} data-testid="homeView">
-        <Grid container direction="column" alignItems="center" spacing={2}>
-          <MaterialCard title="Face Recognition">
-            <CardContent>
-              <Typography data-testid="user_name">
-                Name: {this.state.name}
-              </Typography>
-              <Typography>Confidence: {this.state.confidence}</Typography>
-              <img
-                src={`data:image/png;base64,${this.state.image}`}
-                width={"100%"}
-              />
-            </CardContent>
-          </MaterialCard>
+        {this.state.apiOffline ? (
+          <div data-testid="offlineAlert">
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              Python backend is offline
+            </Alert>
+          </div>
+        ) : (
+          <div data-testid="apiOnline">
+            <Grid container direction="column" alignItems="center" spacing={2}>
+              <MaterialCard title="Face Recognition">
+                <CardContent>
+                  <Typography data-testid="user_name">
+                    Name: {this.state.name}
+                  </Typography>
+                  <Typography>Confidence: {this.state.confidence}</Typography>
+                  <img
+                    src={`data:image/png;base64,${this.state.image}`}
+                    width={"100%"}
+                  />
+                </CardContent>
+              </MaterialCard>
 
-          <MaterialCard title="Register New User">
-            <CardContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Name"
-                type="string"
-                value={this.state.newUserName}
-                onChange={this.setNewUserName}
-              />
-            </CardContent>
-            <CardActions>
-              {/* Don't allow recording without completing form */}
-              <MaterialButton
-                onClick={this.toggleRecording}
-                value={this.state.buttonText}
-              />
-              <MaterialButton onClick={this.trainModel} value="Train Model" />
-            </CardActions>
-          </MaterialCard>
-          <Webcam
-            ref="webcam"
-            audio={false}
-            height={0}
-            width={0}
-            minScreenshotWidth={500}
-            screenshotFormat="image/png"
-          />
-        </Grid>
+              <MaterialCard title="Register New User">
+                <CardContent>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    label="Name"
+                    type="string"
+                    value={this.state.newUserName}
+                    onChange={this.setNewUserName}
+                  />
+                </CardContent>
+                <CardActions>
+                  {/* Don't allow recording without completing form */}
+                  <MaterialButton
+                    onClick={this.toggleRecording}
+                    value={this.state.buttonText}
+                  />
+                  <MaterialButton
+                    onClick={this.trainModel}
+                    value="Train Model"
+                  />
+                </CardActions>
+              </MaterialCard>
+            </Grid>
+          </div>
+        )}
+        <Webcam
+          ref="webcam"
+          audio={false}
+          height={0}
+          width={0}
+          minScreenshotWidth={500}
+          screenshotFormat="image/png"
+        />
       </div>
     );
   }
