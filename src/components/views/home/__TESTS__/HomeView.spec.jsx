@@ -39,4 +39,12 @@ describe("HomeView", () => {
   });
 });
 
+it("should decrease camera resolution when tensorflow runs on cpu", async () => {});
+it("should increase camera resolution when tensorflow runs on gpu", async () => {});
+it("should hide confidence ta camera resolution when tensorflow runs on gpu", async () => {});
+it("should throw error when camera access is denied", async () => {});
 it("should throw error when registering new user if name isn't provided", async () => {});
+it("should display waiting symbol during training", async () => {});
+it("should display restart popup after training", async () => {});
+it("should hide name, confidence when face not detected", async () => {});
+it("should display 'Face not detected' when face not detected", async () => {});

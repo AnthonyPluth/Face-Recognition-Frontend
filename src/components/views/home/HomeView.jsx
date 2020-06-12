@@ -66,7 +66,6 @@ class HomeView extends Component {
       await recordSnapshot(this.state.newUserName, currScreenshot);
     } else {
       const identity = await getIdentityFromSnapshot(currScreenshot);
-      console.log(identity);
       if (identity) {
         this.setState({
           apiOffline: false,
@@ -142,8 +141,8 @@ class HomeView extends Component {
           audio={false}
           height={0}
           width={0}
-          minScreenshotWidth={1280}
-          minScreenshotHeight={720}
+          minScreenshotWidth={500}
+          // minScreenshotHeight={720}
           screenshotFormat="image/png"
         />
       </div>

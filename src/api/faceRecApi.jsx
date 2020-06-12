@@ -2,19 +2,18 @@ import axios from "axios";
 
 export const getIdentityFromSnapshot = async (snapshot) => {
   try {
-    const response = await axios.post("https://192.168.30.33:5000/identify", {
+    const response = await axios.post("https://localhost:5000/identify", {
       body: JSON.stringify({ snapshot }),
     });
-    console.log(response.data);
     return response.data;
   } catch {
-    return "abc";
+    return;
   }
 };
 
 export const recordSnapshot = async (name, snapshot) => {
   const response = await axios.post(
-    `https://192.168.30.33:5000/add_person/${name}`,
+    `https://localhost:5000/add_person/${name}`,
     {
       body: JSON.stringify({ snapshot }),
     }
@@ -23,6 +22,6 @@ export const recordSnapshot = async (name, snapshot) => {
 };
 
 export const trainModel = async (name, snapshot) => {
-  const response = await axios.get("https://192.168.30.33:5000/train_model");
+  const response = await axios.get("https://localhost:5000/train_model");
   return response.data;
 };
