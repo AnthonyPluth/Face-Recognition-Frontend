@@ -5,8 +5,8 @@ import {
   recordSnapshot,
   trainModel,
 } from "../../../api/faceRecApi";
-import MaterialButton from "../../atoms/button";
-import MaterialCard from "../../atoms/card";
+import MaterialButton from "../../elements/button";
+import MaterialCard from "../../elements/card";
 import Grid from "@material-ui/core/Grid";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
@@ -32,7 +32,7 @@ class HomeView extends Component {
       confidence: "0.00%",
     };
     this.getSnapshot = this.getSnapshot.bind(this);
-    this.handleScreenshot = setInterval(this.getSnapshot, 200);
+    this.handleScreenshot = setInterval(this.getSnapshot, 300);
   }
 
   toggleRecording = () => {
@@ -142,7 +142,8 @@ class HomeView extends Component {
           audio={false}
           height={0}
           width={0}
-          minScreenshotWidth={500}
+          minScreenshotWidth={1280}
+          minScreenshotHeight={720}
           screenshotFormat="image/png"
         />
       </div>
