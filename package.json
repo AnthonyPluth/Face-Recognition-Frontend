@@ -1,26 +1,27 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@material-ui/core": "4.10.1",
     "axios": "0.19.2",
     "material-ui": "0.20.2",
-    "praxis": "0.1.22",
-    "praxis-scripts": "6.1.0",
-    "react-popup": "0.10.0",
-    "react-webcam": "5.1.0",
-    "reactjs-popup": "1.5.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-native-camera": "3.30.0",
+    "react-scripts": "3.4.1",
+    "react-webcam": "5.1.0"
   },
   "scripts": {
-    "start": "praxis-scripts start",
-    "build": "praxis-scripts build",
-    "test": "praxis-scripts test",
-    "eject": "praxis-scripts eject",
-    "format": "praxis-scripts format 'src/**/*.{js,jsx}'",
-    "lint": "praxis-scripts lint 'src/**/*.{js,jsx}'",
-    "release": "praxis-scripts release",
-    "inspect": "praxis-scripts inspect"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "format": "react-scripts format 'src/**/*.{js,jsx}'",
+    "lint": "react-scripts lint 'src/**/*.{js,jsx}'",
+    "release": "react-scripts release",
+    "inspect": "react-scripts inspect"
   },
   "browserslist": {
     "development": [
@@ -31,5 +32,18 @@
       "last 2 chrome versions",
       "last 2 firefox versions"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/react": "10.2.1",
+    "react-router": "5.2.0",
+    "react-test-renderer": "16.13.1"
+  },
+  "jest": {
+    "collectCoverageFrom": ["src/*.{jsx,js}"],
+    "clearMocks": true,
+    "automock": true,
+    "transform": {
+      "^.+\\.tsx?$": "babel-jest"
+    }
   }
 }

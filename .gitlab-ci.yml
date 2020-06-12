@@ -1,4 +1,4 @@
-image: node:12.12.0
+image: node:12.14.1
 
 stages:
   - test
@@ -6,6 +6,6 @@ stages:
 test_react:
   stage: test
   before_script:
-    - yarn install
+    - npm install
   script:
-    - yarn test
+    - npm test
