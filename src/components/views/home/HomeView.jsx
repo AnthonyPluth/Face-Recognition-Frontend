@@ -32,7 +32,7 @@ class HomeView extends Component {
       confidence: "0.00%",
     };
     this.getSnapshot = this.getSnapshot.bind(this);
-    this.handleScreenshot = setInterval(this.getSnapshot, 300);
+    this.handleScreenshot = setInterval(this.getSnapshot, 200);
   }
 
   toggleRecording = () => {
@@ -104,7 +104,7 @@ class HomeView extends Component {
                   </Typography>
                   <Typography>Confidence: {this.state.confidence}</Typography>
                   <img
-                    src={`data:image/png;base64,${this.state.image}`}
+                    src={`data:image/webp;base64,${this.state.image}`}
                     width={"100%"}
                   />
                 </CardContent>
@@ -141,9 +141,9 @@ class HomeView extends Component {
           audio={false}
           height={0}
           width={0}
-          minScreenshotWidth={500}
+          minScreenshotWidth={400}
           // minScreenshotHeight={720}
-          screenshotFormat="image/png"
+          screenshotFormat="image/webp"
         />
       </div>
     );
