@@ -2,10 +2,10 @@ import React from "react";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { render, screen } from "@testing-library/react";
-import HomeView from "../HomeView";
-import { getIdentityFromSnapshot } from "../../../../api/faceRecApi";
+import HomeView from "../Home";
+import { getIdentityFromSnapshot } from "../../../helpers/faceRecApi";
 
-jest.mock("../../../../api/faceRecApi");
+jest.mock("../../../helpers/faceRecApi");
 
 describe("HomeView", () => {
   const mockApi = getIdentityFromSnapshot;
@@ -39,9 +39,15 @@ describe("HomeView", () => {
   });
 });
 
-it("should decrease camera resolution when tensorflow runs on cpu", async () => {});
-it("should increase camera resolution when tensorflow runs on gpu", async () => {});
-it("should hide confidence ta camera resolution when tensorflow runs on gpu", async () => {});
+it("should check health api on startup", async () => {});
+it("should throw error when camera access is denied", async () => {});
+it("should throw error when registering new user if name isn't provided", async () => {});
+it("should display waiting symbol during training", async () => {});
+it("should display restart popup after training", async () => {});
+it("should hide name, confidence when face not detected", async () => {});
+it("should display 'Face not detected' when face not detected", async () => {});
+it("should check health api on startup", async () => {});
+it("should throw warning if camera access is denied", async () => {});
 it("should throw error when camera access is denied", async () => {});
 it("should throw error when registering new user if name isn't provided", async () => {});
 it("should display waiting symbol during training", async () => {});
