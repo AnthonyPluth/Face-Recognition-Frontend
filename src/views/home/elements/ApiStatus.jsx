@@ -40,74 +40,70 @@ export default function ApiStatus() {
 
   const updateApiStatus = async () => {
     try {
-      console.log("checking status");
       const apiResponse = await getApiStatus();
       setTensorflowGpu(apiResponse.tensorflowGpu);
       setApiStatus(apiResponse.status);
       setApiFailed(false);
       setApiFailureCount(0);
     } catch {
+      console.log("marking api as down");
       setApiFailed(true);
+      setApiFailureCount(apiFailureCount + 1);
       setApiRetryTime(Date.now() + 10000);
     }
   };
 
+  const handleRecordedFrame = async (rawFrame) => {
+    try {
+      const apiResponse = await recordSnapshot(newUserName, rawFrame);
+      if (apiResponse !== null) {
+        setProcessedFrame(apiResponse.framed_image);
+      }
+    } catch (error) {
+      setApiFailureCount(apiFailureCount + 1);
+    }
+  };
+
+  const handleIdentifyFrame = async (rawFrame) => {
+    // send frame if api is not in failure state
+    try {
+      const apiResponse = await getIdentityFromSnapshot(rawFrame);
+      if (apiResponse !== null) {
+        setProcessedFrame(apiResponse.framed_image);
+        setIdentity(apiResponse.name);
+        setConfidence(apiResponse.confidence);
+        setApiFailureCount(0);
+      }
+    } catch (error) {
+      setApiFailureCount(apiFailureCount + 1);
+    }
+  };
+
   useEffect(() => {
-    // update status on page load
+    // check api status on page load
     updateApiStatus();
   }, []);
 
   useEffect(() => {
     // update status every 10 seconds when failing
-    if (apiFailed) {
+    if (apiFailed || apiFailureCount >= 5) {
+      console.log("api entered failed state; setting up ping to check status");
+      if (!apiFailed) setApiFailed(true);
+
+      setApiRetryTime(Date.now() + 10000);
       const interval = setInterval(() => {
         updateApiStatus();
       }, 10000);
       return () => clearInterval(interval);
     }
-  }, [apiFailed]);
-
-  useEffect(() => {
-    console.log(apiFailureCount);
-    if (!apiFailed && apiFailureCount >= 5) {
-      // setting Api as failing
-      setApiFailed(true);
-    }
   }, [apiFailureCount]);
 
-  const handleRecordedFrame = async () => {
+  useEffect(() => {
+    // send frame to appropriate endpoint
     if (!apiFailed) {
-      try {
-        const apiResponse = await recordSnapshot(newUserName, frame);
-        if (apiResponse !== null) {
-          setProcessedFrame(apiResponse.framed_image);
-        }
-      } catch (error) {
-        setApiFailureCount(apiFailureCount + 1);
-      }
+      isRecording ? handleRecordedFrame(frame) : handleIdentifyFrame(frame);
     }
-  };
-
-  const handleIdentifyFrame = async () => {
-    if (!apiFailed) {
-      try {
-        const apiResponse = await getIdentityFromSnapshot(frame);
-        if (apiResponse !== null) {
-          setProcessedFrame(apiResponse.framed_image);
-          setIdentity(apiResponse.name);
-          setConfidence(apiResponse.confidence);
-        }
-      } catch (error) {
-        setApiFailureCount(apiFailureCount + 1);
-      }
-    }
-  };
-
-  if (isRecording) {
-    handleRecordedFrame();
-  } else {
-    handleIdentifyFrame();
-  }
+  }, [frame]);
 
   return <Countdown date={apiRetryTime} renderer={renderer} />;
 }

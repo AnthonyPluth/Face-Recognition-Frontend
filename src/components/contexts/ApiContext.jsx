@@ -10,7 +10,7 @@ export const ApiContextProvider = ({ children }) => {
   const [apiFailed, setApiFailed] = useState(false);
   const [identity, setIdentity] = useState();
   const [confidence, setConfidence] = useState();
-  const [apiRetryTime, setApiRetryTime] = useState(Date.now() + 10000);
+  const [apiRetryTime, setApiRetryTime] = useState(Date.now() + 999999);
   const value = {
     apiStatus,
     setApiStatus,

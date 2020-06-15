@@ -25,28 +25,24 @@ export const WebcamComponent = () => {
     setFrame(webcamRef.current.getScreenshot());
   }, [setFrame, webcamRef]);
 
+  const adjustFramerate = (usingGPU) => {
+    setFramerate(usingGPU ? 50 : 200);
+  };
+
+  const adjustScreenshotWidth = (usingGPU) => {
+    setMaxScreenshotWidth(usingGPU ? 1280 : 250);
+  };
+
   useEffect(() => {
-    const adjustFramerate = () => {
-      setFramerate(tensorflowGpu ? 50 : 500);
-    };
-
-    const adjustScreenshotWidth = () => {
-      setMaxScreenshotWidth(tensorflowGpu ? 1280 : 640);
-    };
-
+    // update framerate & frame size when tensorFlow GPU state changes
     adjustFramerate();
     adjustScreenshotWidth();
 
-    setInterval(() => {
+    const interval = setInterval(() => {
       getFrame();
     }, framerate);
-  }, []);
-
-  // const videoConstraints = {
-  //   width: maxScreenshotWidth,
-  //   // height: 720,
-  //   facingMode: "user",
-  // };
+    return () => clearInterval(interval);
+  }, [tensorflowGpu]);
 
   return (
     <MaterialCard title="Stats" data-testid="webcam-component">
@@ -59,7 +55,6 @@ export const WebcamComponent = () => {
           width={0}
           minScreenshotWidth={maxScreenshotWidth}
           screenshotFormat="image/webp"
-          // videoConstraints={videoConstraints}
         />
         <div data-testid="webcam-component">
           <Typography>

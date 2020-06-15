@@ -1,18 +1,24 @@
 import React, { useContext, useState } from "react";
+import Alert from "@material-ui/lab/Alert";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Snackbar from "@material-ui/core/Snackbar";
+import Slide from "@material-ui/core/Slide";
+import TextField from "@material-ui/core/TextField";
+import { useFormik } from "formik";
 import MaterialButton from "../../../components/shared/button";
 import MaterialCard from "../../../components/shared/card";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import TextField from "@material-ui/core/TextField";
 import { RegistrationContext } from "../../../components/contexts/RegistrationContext";
-import { useFormik } from "formik";
 import { apiTrainModel } from "../../../helpers/faceRecApi";
 
 export default function RegistrationCard() {
   const registrationContext = useContext(RegistrationContext);
   const { setNewUserName, isRecording, setIsRecording } = registrationContext;
-  const [isLoading, setIsLoading] = useState(false);
+  const [modelTraining, setModelTraining] = useState({
+    status: "",
+    snackbarOpen: false,
+  });
 
   const validate = (values) => {
     const errors = {};
@@ -39,33 +45,15 @@ export default function RegistrationCard() {
   };
 
   const trainModel = async () => {
-    setIsLoading(true);
+    setModelTraining({ ...modelTraining, status: "in progress" });
     await apiTrainModel();
-    setIsLoading(false);
+    setModelTraining({ status: "completed", snackbarOpen: true });
   };
 
-  // getSnapshot = async () => {
-  //   const currScreenshot = refs.webcam.getScreenshot();
-
-  //   if (isRecording) {
-  //     await recordSnapshot(newUserName, currScreenshot);
-  //   } else {
-  //     const identity = await getIdentityFromSnapshot(currScreenshot);
-  //     if (identity) {
-  //       setState({
-  //         apiOffline: false,
-  //         image: identity.framed_image,
-  //         name: identity.name ? identity.name : "Face not detected",
-  //         confidence: (identity.confidence / 100).toLocaleString(undefined, {
-  //           style: "percent",
-  //           minimumFractionDigits: 2,
-  //         }),
-  //       });
-  //     } else {
-  //       setState({ apiOffline: true });
-  //     }
-  //   }
-  // };
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") return;
+    setModelTraining({ ...modelTraining, snackbarOpen: false });
+  };
 
   return (
     <MaterialCard title="Register New User">
@@ -89,13 +77,23 @@ export default function RegistrationCard() {
             value={isRecording ? "Stop Recording" : "Start Recording"}
             type="submit"
           />
-          {isLoading ? (
+          {modelTraining.status === "in progress" ? (
             <CircularProgress />
           ) : (
             <MaterialButton onClick={trainModel} value="Train Model" />
           )}
         </CardActions>
       </form>
+
+      <Snackbar
+        open={modelTraining.snackbarOpen}
+        onClose={handleClose}
+        TransitionComponent={Slide}
+      >
+        <Alert onClose={handleClose} severity="success">
+          Training completed; please restart the python API to reload the model
+        </Alert>
+      </Snackbar>
     </MaterialCard>
   );
 }

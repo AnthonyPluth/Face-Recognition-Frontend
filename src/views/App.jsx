@@ -4,9 +4,11 @@ import { ApiContextProvider } from "../components/contexts/ApiContext";
 
 export const App = () => {
   return (
-    <ApiContextProvider>
-      <HomeView />
-    </ApiContextProvider>
+    <div style={{ overflow: "hidden" }}>
+      <ApiContextProvider>
+        <HomeView />
+      </ApiContextProvider>
+    </div>
   );
 };
 export default App;
