@@ -1,12 +1,13 @@
 import React, { createContext, useState, useContext } from "react";
 
-export const WebcamContext = createContext();
+export const RegistrationContext = createContext();
 
-export const WebcamContextProvider = ({ children }) => {
+export const RegistrationContextProvider = ({ children }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [maxScreenshotWidth, setMaxScreenshotWidth] = useState(999);
   const [framerate, setFramerate] = useState(999);
-  const [snapshot, setSnapshot] = useState();
+  const [frame, setFrame] = useState("");
+  const [newUserName, setNewUserName] = useState("");
   const value = {
     isRecording,
     setIsRecording,
@@ -14,14 +15,18 @@ export const WebcamContextProvider = ({ children }) => {
     setMaxScreenshotWidth,
     framerate,
     setFramerate,
-    snapshot,
-    setSnapshot,
+    frame,
+    setFrame,
+    newUserName,
+    setNewUserName,
   };
   return (
-    <WebcamContext.Provider value={value}>{children}</WebcamContext.Provider>
+    <RegistrationContext.Provider value={value}>
+      {children}
+    </RegistrationContext.Provider>
   );
 };
 
 export function useWebcamState() {
-  return useContext(WebcamContext);
+  return useContext(RegistrationContext);
 }

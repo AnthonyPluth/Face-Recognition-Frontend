@@ -40,17 +40,6 @@ describe("HomeView", () => {
 });
 
 it("should check health api on startup", async () => {});
-it("should throw error when camera access is denied", async () => {});
-it("should throw error when registering new user if name isn't provided", async () => {});
-it("should display waiting symbol during training", async () => {});
-it("should display restart popup after training", async () => {});
-it("should hide name, confidence when face not detected", async () => {});
-it("should display 'Face not detected' when face not detected", async () => {});
-it("should check health api on startup", async () => {});
 it("should throw warning if camera access is denied", async () => {});
-it("should throw error when camera access is denied", async () => {});
-it("should throw error when registering new user if name isn't provided", async () => {});
-it("should display waiting symbol during training", async () => {});
-it("should display restart popup after training", async () => {});
+it("shxould display 'Face not detected' when face not detected", async () => {});
 it("should hide name, confidence when face not detected", async () => {});
-it("should display 'Face not detected' when face not detected", async () => {});

@@ -1,21 +1,21 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import WebcamComponent from "../webcam";
-import { ApiStatusContext } from "../../../../components/contexts/ApiStatusContext";
-import { WebcamContextProvider } from "../../../../components/contexts/WebcamContext";
+import { ApiContext } from "../../../../components/contexts/ApiContext";
+import { RegistrationContextProvider } from "../../../../components/contexts/RegistrationContext";
 import {
-  mockApiStatusContextCpu,
-  mockApiStatusContextGpu,
-} from "../../../../components/contexts/mockContexts/mockApiStatusContext";
+  mockApiContextCpu,
+  mockApiContextGpu,
+} from "../../../../components/contexts/mockContexts/mockApiContext";
 
 describe("webcam", () => {
   it("should decrease framerate & frame size when tensorflow runs on cpu", async () => {
     const { getByText } = render(
-      <ApiStatusContext.Provider value={mockApiStatusContextCpu()}>
-        <WebcamContextProvider>
+      <ApiContext.Provider value={mockApiContextCpu()}>
+        <RegistrationContextProvider>
           <WebcamComponent />
-        </WebcamContextProvider>
-      </ApiStatusContext.Provider>
+        </RegistrationContextProvider>
+      </ApiContext.Provider>
     );
     await screen.findByTestId("webcam-component");
 
@@ -25,11 +25,11 @@ describe("webcam", () => {
 
   it("should increase framerate & frame size when tensorflow runs on gpu", async () => {
     const { getByText } = render(
-      <ApiStatusContext.Provider value={mockApiStatusContextGpu()}>
-        <WebcamContextProvider>
+      <ApiContext.Provider value={mockApiContextGpu()}>
+        <RegistrationContextProvider>
           <WebcamComponent />
-        </WebcamContextProvider>
-      </ApiStatusContext.Provider>
+        </RegistrationContextProvider>
+      </ApiContext.Provider>
     );
     await screen.findByTestId("webcam-component");
 
