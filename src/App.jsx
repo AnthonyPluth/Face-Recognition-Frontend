@@ -1,6 +1,6 @@
 import React from "react";
-import HomeView from "./home/Home";
-import { ApiContextProvider } from "../components/contexts/ApiContext";
+import HomeView from "./views/home/Home";
+import { ApiContextProvider } from "./components/contexts/ApiContext";
 
 export const App = () => {
   return (

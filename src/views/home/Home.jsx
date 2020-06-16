@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import { RegistrationContextProvider } from "../../components/contexts/RegistrationContext";
 import FaceRecCard from "./elements/FaceRecCard";
 import RegistrationCard from "./elements/RegistrationCard";
-import WebcamComponent from "./elements/Webcam";
+import WebcamComponent from "./elements/WebcamComponent";
 import ApiStatus from "./elements/ApiStatus";
 
 export default function HomeView() {

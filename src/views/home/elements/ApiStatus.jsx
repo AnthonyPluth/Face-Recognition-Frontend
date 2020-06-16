@@ -30,7 +30,7 @@ export default function ApiStatus() {
   const renderer = ({ seconds }) => {
     if (apiFailed) {
       return (
-        <Alert variant="filled" severity="error">
+        <Alert variant="filled" severity="error" data-testid="offlineAlert">
           <AlertTitle>API Down</AlertTitle>
           Python backend is offline; trying again in {seconds} seconds...
         </Alert>
@@ -105,5 +105,9 @@ export default function ApiStatus() {
     }
   }, [frame]);
 
-  return <Countdown date={apiRetryTime} renderer={renderer} />;
+  return (
+    <div data-testid="apiStatus">
+      <Countdown date={apiRetryTime} renderer={renderer} />
+    </div>
+  );
 }

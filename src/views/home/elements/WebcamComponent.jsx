@@ -35,8 +35,8 @@ export const WebcamComponent = () => {
 
   useEffect(() => {
     // update framerate & frame size when tensorFlow GPU state changes
-    adjustFramerate();
-    adjustScreenshotWidth();
+    adjustFramerate(tensorflowGpu);
+    adjustScreenshotWidth(tensorflowGpu);
 
     const interval = setInterval(() => {
       getFrame();

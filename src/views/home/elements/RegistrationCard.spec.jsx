@@ -1,12 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import WebcamComponent from "../Webcam";
-import { ApiContext } from "../../../../components/contexts/ApiContext";
-import { WebcamContextProvider } from "../../../../components/contexts/WebcamContext";
-import {
-  mockApiContextRecording,
-  mockApiContextNotRecording,
-} from "../../../../components/contexts/mockContexts/mockApiContext";
+import WebcamComponent from "./WebcamComponent";
+import { ApiContext } from "../../../components/contexts/ApiContext";
 
 describe("Registration Card", () => {
   it("should display waiting symbol during training", async () => {});
