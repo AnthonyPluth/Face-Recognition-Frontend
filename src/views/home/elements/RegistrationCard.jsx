@@ -88,7 +88,7 @@ export default function RegistrationCard() {
         open={trainingStatus === "completed"}
         onClose={handleClose}
         TransitionComponent={Slide}
-        autoHideDuration={10000}
+        autoHideDuration={5000}
         data-testid="trainingComplete"
       >
         <Alert onClose={handleClose} severity="success">

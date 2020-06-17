@@ -17,6 +17,7 @@ export const getIdentityFromSnapshot = async (snapshot) => {
     const response = await axios.post("https://localhost:5000/identify", {
       body: b64_snapshot,
     });
+    console.log(response.data);
     return response.data;
   }
 };
