@@ -30,15 +30,11 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "cypress:verify": "cypress verify",
-    "test": "nyc instrument --compact=false src instrumented",
-    "coverage": "nyc report --reporter=text-summary",
-    "coverage:html": "npx nyc report --reporter=html",
+    "test": "start-test 3000 cypress:run",
+    "coverage": "nyc report --nycrc-path=.nycrc.json --reporter=text-summary",
+    "coverage:html": "nyc report --nycrc-path=.nycrc.json --reporter=html",
     "start": "react-scripts -r @cypress/instrument-cra start",
-    "build": "node scripts/build.js",
-    "format": "node scripts/format.js 'src/**/*.{js,jsx}'",
-    "lint": "node scripts/lint.js 'src/**/*.{js,jsx}'",
-    "release": "node scripts/release.js",
-    "inspect": "node scripts/inspect.js"
+    "build": "node scripts/build.js"
   },
   "browserslist": {
     "development": [
@@ -66,5 +62,6 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  }
+  },
+
 }

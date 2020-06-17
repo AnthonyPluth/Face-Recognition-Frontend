@@ -9,7 +9,7 @@ cache:
     - cache/npm
     - cache/Cypress
 
-# this job installs NPM dependencies and Cypress
+# installs NPM dependencies and Cypress
 test:
   image: cypress/base:12.16.2
   script:

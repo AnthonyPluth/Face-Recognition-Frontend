@@ -1,12 +1,26 @@
 {
-  "presets": ["@babel/preset-react"],
-  "env": {
-    "test": {
-      "plugins": [["istanbul", {
-        "exclude": [
-          "**/*.spec.js", "**/serviceWorker.js"
-        ]}]]
-    }
+  "presets":[
+     "@babel/preset-react"
+  ],
+  "env":{
+     "test":{
+        "plugins":[
+           [
+              "istanbul",
+              {
+                 "exclude":[
+                    "**/*.spec.js",
+                    "src/serviceWorker.js"
+                 ],
+                 "include":[
+                    "src/**/*.{js,jsx}"
+                 ]
+              }
+           ]
+        ]
+     }
   },
-  "plugins": ["transform-class-properties"]
+  "plugins":[
+     "transform-class-properties"
+  ]
 }
