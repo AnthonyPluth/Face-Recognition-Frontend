@@ -8,12 +8,11 @@
            [
               "istanbul",
               {
+               "include":[
+                  "src/**/*.{js,jsx}"
+               ],
                  "exclude":[
-                    "**/*.spec.js",
-                    "src/serviceWorker.js"
-                 ],
-                 "include":[
-                    "src/**/*.{js,jsx}"
+                    "**/*.spec.{js,jsx}"
                  ]
               }
            ]
