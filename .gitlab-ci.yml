@@ -2,6 +2,7 @@ image: node:12.14.1
 
 stages:
   - test
+  - deploy
 
 test_react:
   stage: test
@@ -9,3 +10,19 @@ test_react:
     - npm install
   script:
     - npm test
+  artifacts:
+    paths:
+      - coverage/
+
+pages:
+  stage: deploy
+  dependencies:
+    - test_react
+  script:
+    - mv coverage/ public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  only:
+    - master
