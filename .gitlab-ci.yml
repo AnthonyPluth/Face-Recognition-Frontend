@@ -21,7 +21,7 @@ test:
     - npm run cypress:verify
     # start the server, wait for it to respond, then run Cypress tests
     - NODE_ENV=test npm test
-    # print coverage summary so that GitLab CI can parse the coverage number
+    # print coverage summary so GitLab CI can parse the coverage number
     - npx nyc report --reporter=text-summary
   artifacts:
     when: always
