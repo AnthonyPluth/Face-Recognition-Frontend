@@ -1,114 +1,107 @@
-import React from "react";
-import RegistrationCard from "./RegistrationCard";
-import * as ApiContext from "../../../components/ApiContext";
-import {
-  render,
-  screen,
-  fireEvent,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+/// <reference types="cypress" />
 
-jest.mock("../../../helpers/faceRecApi");
-
-describe("Registration Card", () => {
-  let mockContext = {};
-  const setIsRecordingMock = jest.fn();
-  const setNewUserNameMock = jest.fn();
+context("Registration Card", () => {
+  Cypress.Commands.add("requestsCount", (alias) =>
+    cy
+      .wrap()
+      .then(
+        () => cy.state("requests").filter((req) => req.alias === alias).length
+      )
+  );
 
   beforeEach(() => {
-    mockContext.setNewUserName = setNewUserNameMock;
-    mockContext.setIsRecording = setIsRecordingMock;
-    mockContext.isRecording = false;
+    cy.visit(Cypress.config("baseUrl"));
+    cy.server();
+    cy.route({
+      method: "GET",
+      url: "/status",
+      response: {
+        status: "up",
+        tensorflowGpu: false,
+        tensorflowVersion: "1.15.3",
+      },
+    });
+
+    cy.route({
+      method: "POST",
+      url: "/identify",
+      response: {
+        name: "test",
+        confidence: 23.652345,
+        framed_image:
+          "UklGRjgAAABXRUJQVlA4ICwAAACQAQCdASoBAAEAAgA0JaACdLoAA5gA/vmTb/+QH/+QH/+QH/8gP+IXexhQAA==",
+      },
+    }).as("identify");
+
+    cy.route({
+      method: "POST",
+      url: "/add_person/*",
+      response: {
+        framed_image:
+          "UklGRkAAAABXRUJQVlA4IDQAAADwAQCdASoBAAEAAQAcJaACdLoB+AAETAAA/vW4f/6aR40jxpHxcP/ugT90CfugT/3NoAAA",
+      },
+    }).as("recording");
+
+    cy.route({
+      method: "GET",
+      url: "/train_model",
+      response: { "training status": "complete" },
+      delay: 1000,
+    }).as("trainModel");
   });
 
-  it("should throw validation error if newUserName is undefined", async () => {
-    jest
-      .spyOn(ApiContext, "useApiContext")
-      .mockImplementation(() => mockContext);
+  it("should throw validation error if name not entered", () => {
+    cy.get('[type="submit"] > .MuiButton-label').click();
+    cy.get(".MuiFormHelperText-root").should("contain", "Name is required");
 
-    render(<RegistrationCard />);
+    // should be hitting identify endpoint
+    cy.wait("@identify");
+    cy.requestsCount("identify").should("be.greaterThan", 0);
+    cy.requestsCount("recording").should("be", 0);
+  });
 
-    // Click 'Start Recording'
-    const recordButton = await screen.findByText("Start Recording");
-    fireEvent.click(recordButton);
-    await screen.findByText("Start Recording");
+  it("should start recording if name provided", () => {
+    cy.get("[data-testid=newUserName]").type("test user");
+    cy.get('[type="submit"] > .MuiButton-label').click();
 
-    // Expect validation message
-    await screen.getByText(/^Name\ is\ required/);
-    expect(screen.getByText(/^Name\ is\ required/).textContent).toBe(
-      "Name is required"
+    // should be hitting recording endpoint
+    cy.wait("@recording");
+    cy.requestsCount("recording").should("be.greaterThan", 0);
+  });
+
+  it("test training model", () => {
+    // hit training button
+    cy.get("[data-testid=trainingButton] > .MuiButton-label").click();
+
+    // check for spinner
+    cy.get(".MuiCircularProgress-svg").should("exist");
+
+    // check for snackbar after training completes
+    cy.wait(["@trainModel"]);
+    cy.get("[data-testid=trainingComplete] > .MuiPaper-root").should("exist");
+
+    // test clickaway
+    cy.get("[data-testid=user_name]").click();
+    cy.get("[data-testid=trainingComplete] > .MuiPaper-root").should("exist");
+
+    // test clicking x
+    cy.get(".MuiIconButton-label > .MuiSvgIcon-root").click();
+    cy.get("[data-testid=trainingComplete] > .MuiPaper-root").should(
+      "not.exist"
     );
 
-    // Expect form to not be submitted
-    expect(setIsRecordingMock).toBeCalledTimes(0);
-  });
+    // test timeout
+    // bring snackbar back up
+    cy.get("[data-testid=trainingButton] > .MuiButton-label").click();
 
-  it("should bypass validation if already recording", async () => {
-    mockContext.isRecording = true;
-    jest
-      .spyOn(ApiContext, "useApiContext")
-      .mockImplementation(() => mockContext);
+    // wait to receive success response
+    cy.wait(["@trainModel"]);
 
-    render(<RegistrationCard />);
-
-    // Click 'Stop Recording'
-    const recordButton = await screen.findByText("Stop Recording");
-    fireEvent.click(recordButton);
-    await screen.findByText("Stop Recording");
-
-    expect(setIsRecordingMock).toHaveBeenCalledTimes(1);
-    expect(setIsRecordingMock).toHaveBeenCalledWith(false);
-  });
-
-  it("should throw validation error if newUserName is undefined", async () => {
-    mockContext.isRecording = false;
-    jest
-      .spyOn(ApiContext, "useApiContext")
-      .mockImplementation(() => mockContext);
-
-    render(<RegistrationCard />);
-
-    // Simulate text entry
-    const nameInput = screen.getByTestId("newUserName");
-    fireEvent.change(nameInput, { target: { value: "abc" } });
-
-    // Click 'Start Recording'
-    const recordButton = await screen.findByText("Start Recording");
-    fireEvent.click(recordButton);
-    await screen.findByText("Start Recording");
-
-    // Expect form to be submitted & context to be set
-    expect(setIsRecordingMock).toHaveBeenCalledWith(true);
-    expect(setNewUserNameMock).toHaveBeenCalledWith("abc");
-  });
-
-  it("should display success snackbar after training", async () => {
-    render(<RegistrationCard />);
-
-    // click training button
-    const trainingButton = await screen.findByText("Train Model");
-    fireEvent.click(trainingButton);
-    await screen.findByText("Train Model");
-    await screen.findByTestId("trainingButton");
-    await screen.findByTestId("trainingComplete");
-
-    // ensure snackbar is shown on completion
-    await screen.queryByTestId("trainingInProgress");
-    expect(screen.queryByTestId("trainingInProgress")).toBeNull();
-    expect(screen.getByTestId("trainingButton")).toBeTruthy();
-    expect(screen.getByTestId("trainingComplete")).toBeTruthy();
-
-    // test clickaway from alert - should remain open
-    const recordButton = await screen.findByText("Start Recording");
-    fireEvent.click(recordButton);
-    expect(screen.queryByTestId("trainingComplete")).toBeTruthy();
-
-    await waitForElementToBeRemoved(
-      () => screen.getByTestId("trainingComplete"),
-      {
-        timeout: 11000,
-      }
-    );
-    expect(screen.queryByTestId("trainingComplete")).toBeNull();
+    // wait for snackbar to timeout
+    cy.wait(6000).then(() => {
+      cy.get("[data-testid=trainingComplete] > .MuiPaper-root").should(
+        "not.exist"
+      );
+    });
   });
 });

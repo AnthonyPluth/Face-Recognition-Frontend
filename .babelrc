@@ -1,11 +1,12 @@
 {
-    "env": {
-      "test": {
-        "presets": ["@babel/preset-react"],
-        "plugins": [         ["istanbul", {
-            "exclude": [
-              "**/*.spec.js"
-            ]}], "transform-class-properties" ]
-      }
+  "presets": ["@babel/preset-react"],
+  "env": {
+    "test": {
+      "plugins": [["istanbul", {
+        "exclude": [
+          "**/*.spec.js", "**/serviceWorker.js"
+        ]}]]
     }
-  }
+  },
+  "plugins": ["transform-class-properties"]
+}

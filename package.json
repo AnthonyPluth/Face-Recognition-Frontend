@@ -6,8 +6,9 @@
   "dependencies": {
     "@material-ui/core": "4.10.1",
     "@material-ui/lab": "4.0.0-alpha.56",
-    "babel-cli": "^6.26.0",
     "axios": "0.19.2",
+    "babel-cli": "^6.26.0",
+    "cross-env": "7.0.2",
     "eslint-config-react-app": "^5.2.1",
     "eslint-loader": "3.0.3",
     "eslint-plugin-jsx-a11y": "6.2.3",
@@ -25,9 +26,8 @@
   },
   "scripts": {
     "cypress": "cypress open",
-    "coverage": "react-scripts test --env=jsdom --coverage ",
-    "open:coverage": "npm run coverage && opn ./coverage/lcov-report/index.html",
-    "test": "react-scripts test --env=jsdom",
+    "test": "nyc report --reporter=html",
+    "coverage": "nyc npm run test",
     "start": "react-scripts -r @cypress/instrument-cra start",
     "build": "node scripts/build.js",
     "format": "node scripts/format.js 'src/**/*.{js,jsx}'",
@@ -51,9 +51,11 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-plugin-istanbul": "6.0.0",
     "cypress": "4.8.0",
+    "cypress-react-unit-test": "4.7.2",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
     "istanbul-lib-coverage": "2.0.5",
+    "mocha": "8.0.1",
     "nyc": "14.1.1"
   },
   "eslintConfig": {
