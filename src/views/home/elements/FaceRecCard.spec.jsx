@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import FaceRecCard from "./FaceRecCard";
-import * as ApiContext from "../../../components/contexts/ApiContext";
+import * as ApiContext from "../../../components/ApiContext";
 
 describe("FaceRecCard", () => {
   let mockContext = {};

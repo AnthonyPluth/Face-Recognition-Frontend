@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import WebcamComponent from "./WebcamComponent";
 import ApiStatus from "./ApiStatus";
-import { ApiContextProvider } from "../../../components/contexts/ApiContext";
+import { ApiContextProvider } from "../../../components/ApiContext";
 import { getApiStatus } from "../../../helpers/faceRecApi";
 
 jest.mock("../../../helpers/faceRecApi");

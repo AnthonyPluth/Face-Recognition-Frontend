@@ -4,7 +4,7 @@ import FaceRecCard from "./elements/FaceRecCard";
 import RegistrationCard from "./elements/RegistrationCard";
 import WebcamComponent from "./elements/WebcamComponent";
 import ApiStatus from "./elements/ApiStatus";
-import { ApiContextProvider } from "../../components/contexts/ApiContext";
+import { ApiContextProvider } from "../../components/ApiContext";
 
 export default function HomeView() {
   return (

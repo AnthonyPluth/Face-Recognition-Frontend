@@ -3,13 +3,13 @@ import Alert from "@material-ui/lab/Alert";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Snackbar from "@material-ui/core/Snackbar";
 import Slide from "@material-ui/core/Slide";
+import Snackbar from "@material-ui/core/Snackbar";
 import TextField from "@material-ui/core/TextField";
 import { useFormik } from "formik";
-import MaterialButton from "../../../components/shared/button";
-import MaterialCard from "../../../components/shared/card";
-import { useApiContext } from "../../../components/contexts/ApiContext";
+import MaterialButton from "../../../components/button";
+import MaterialCard from "../../../components/card";
+import { useApiContext } from "../../../components/ApiContext";
 import { apiTrainModel } from "../../../helpers/faceRecApi";
 
 export default function RegistrationCard() {

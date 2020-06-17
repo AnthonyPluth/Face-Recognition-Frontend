@@ -1,8 +1,8 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
-import MaterialCard from "../../../components/shared/card";
-import { useApiContext } from "../../../components/contexts/ApiContext";
+import MaterialCard from "../../../components/card";
+import { useApiContext } from "../../../components/ApiContext";
 
 // Make identity a dictionary containing name, confidence
 

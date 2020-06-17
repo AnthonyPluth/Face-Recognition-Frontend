@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { useApiContext } from "../../../components/contexts/ApiContext";
+import { useApiContext } from "../../../components/ApiContext";
 import {
   getApiStatus,
   getIdentityFromSnapshot,
@@ -37,13 +37,13 @@ export default function ApiStatus() {
   };
 
   const updateApiStatus = async () => {
-    try {
-      const apiResponse = await getApiStatus();
+    const apiResponse = await getApiStatus();
+    if (apiResponse !== {}) {
       setTensorflowGpu(apiResponse.tensorflowGpu);
       setApiStatus(apiResponse.status);
       setApiFailed(false);
       setApiFailureCount(0);
-    } catch {
+    } else {
       setApiFailed(true);
       setApiFailureCount(apiFailureCount + 1);
       setApiRetryTime(Date.now() + 10000);

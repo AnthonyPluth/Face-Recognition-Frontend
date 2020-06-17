@@ -1,9 +1,9 @@
 import React, { useEffect, useContext, useRef } from "react";
 import Webcam from "react-webcam";
-import MaterialCard from "../../../components/shared/card";
+import MaterialCard from "../../../components/card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import { ApiContext } from "../../../components/contexts/ApiContext";
+import { ApiContext } from "../../../components/ApiContext";
 
 export const WebcamComponent = () => {
   const apiContext = useContext(ApiContext);

@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import * as ApiContext from "../../../components/contexts/ApiContext";
+import * as ApiContext from "../../../components/ApiContext";
 import ApiStatus from "./ApiStatus";
 import { getApiStatus } from "../../../helpers/faceRecApi";
 
@@ -34,11 +34,13 @@ describe("ApiStatus", () => {
       .mockImplementation(() => mockContext);
 
     render(<ApiStatus />);
-    debug();
 
-    // await screen.findByTestId("offlineAlert");
-    await screen.getByText(/^Python\ backend/);
-    expect(screen.getByTestId("offlineAlert").textContent).toBe("failed");
+    await screen.findByTestId("offlineAlert");
+    // await screen.findByText(/^Python\ backend/);
+    expect(screen.getByText("API Down").textContent).toBe("API Down");
+
+    expect(setApiFailedMock).toHaveBeenCalledWith(true);
+    expect(setApiRetryTimeMock).toHaveBeenCalledTimes(1);
   });
 
   // it("should not show offline alert if api is online", async () => {
@@ -54,6 +56,4 @@ describe("ApiStatus", () => {
   //   console.log(getByTestId("apiStatus").textContent);
   //   expect(getByTestId("apiStatus").textContent.toBe(""));
   // });
-
-  it("should check health api on startup", async () => {});
 });

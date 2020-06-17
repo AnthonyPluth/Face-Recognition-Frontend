@@ -1,6 +1,6 @@
 import React from "react";
 import RegistrationCard from "./RegistrationCard";
-import * as ApiContext from "../../../components/contexts/ApiContext";
+import * as ApiContext from "../../../components/ApiContext";
 import {
   render,
   screen,

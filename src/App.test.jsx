@@ -3,7 +3,7 @@ import { createMemoryHistory } from "history";
 import App from "./App";
 import { Router } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
-import * as ApiContext from "./components/contexts/ApiContext";
+import * as ApiContext from "./components/ApiContext";
 
 test("renders without crashing", async () => {
   const mockContext = {};
