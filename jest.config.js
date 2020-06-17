@@ -8,4 +8,5 @@ module.exports = {
   collectCoverageFrom: ["src/App.jsx", "src/**/*.{jsx,ts,tsx}"],
   transformIgnorePatterns: [`node_modules/(?!ky)`],
   clearMocks: true,
+  testTimeout: 25000,
 };

@@ -4,20 +4,18 @@ import MaterialCard from "../../../components/shared/card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { ApiContext } from "../../../components/contexts/ApiContext";
-import { RegistrationContext } from "../../../components/contexts/RegistrationContext";
 
 export const WebcamComponent = () => {
   const apiContext = useContext(ApiContext);
-  const registrationContext = useContext(RegistrationContext);
 
-  const { tensorflowGpu } = apiContext;
   const {
     setFrame,
     framerate,
     setFramerate,
     maxScreenshotWidth,
     setMaxScreenshotWidth,
-  } = registrationContext;
+    tensorflowGpu,
+  } = apiContext;
 
   const webcamRef = useRef(null);
 

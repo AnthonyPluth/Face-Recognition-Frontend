@@ -1,7 +1,6 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { RegistrationContext } from "../../../components/contexts/RegistrationContext";
-import { ApiContext } from "../../../components/contexts/ApiContext";
+import { useApiContext } from "../../../components/contexts/ApiContext";
 import {
   getApiStatus,
   getIdentityFromSnapshot,
@@ -10,22 +9,21 @@ import {
 import Countdown from "react-countdown";
 
 export default function ApiStatus() {
-  const registrationContext = useContext(RegistrationContext);
-  const apiContext = useContext(ApiContext);
   const [apiFailureCount, setApiFailureCount] = useState(0);
-
-  const { frame, isRecording, newUserName } = registrationContext;
   const {
     apiFailed,
-    setApiFailed,
-    setApiStatus,
-    setTensorflowGpu,
-    setProcessedFrame,
-    setIdentity,
-    setConfidence,
     apiRetryTime,
+    frame,
+    isRecording,
+    newUserName,
+    setApiFailed,
     setApiRetryTime,
-  } = apiContext;
+    setApiStatus,
+    setConfidence,
+    setIdentity,
+    setProcessedFrame,
+    setTensorflowGpu,
+  } = useApiContext();
 
   const renderer = ({ seconds }) => {
     if (apiFailed) {
@@ -46,7 +44,6 @@ export default function ApiStatus() {
       setApiFailed(false);
       setApiFailureCount(0);
     } catch {
-      console.log("marking api as down");
       setApiFailed(true);
       setApiFailureCount(apiFailureCount + 1);
       setApiRetryTime(Date.now() + 10000);
@@ -65,7 +62,6 @@ export default function ApiStatus() {
   };
 
   const handleIdentifyFrame = async (rawFrame) => {
-    // send frame if api is not in failure state
     try {
       const apiResponse = await getIdentityFromSnapshot(rawFrame);
       if (apiResponse !== null) {
@@ -87,7 +83,6 @@ export default function ApiStatus() {
   useEffect(() => {
     // update status every 10 seconds when failing
     if (apiFailed || apiFailureCount >= 5) {
-      console.log("api entered failed state; setting up ping to check status");
       if (!apiFailed) setApiFailed(true);
 
       setApiRetryTime(Date.now() + 10000);
@@ -105,9 +100,5 @@ export default function ApiStatus() {
     }
   }, [frame]);
 
-  return (
-    <div data-testid="apiStatus">
-      <Countdown date={apiRetryTime} renderer={renderer} />
-    </div>
-  );
+  return <Countdown date={apiRetryTime} renderer={renderer} />;
 }

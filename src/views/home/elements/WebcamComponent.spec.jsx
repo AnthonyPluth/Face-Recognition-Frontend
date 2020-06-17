@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import WebcamComponent from "./WebcamComponent";
 import ApiStatus from "./ApiStatus";
 import { ApiContextProvider } from "../../../components/contexts/ApiContext";
-import { RegistrationContextProvider } from "../../../components/contexts/RegistrationContext";
 import { getApiStatus } from "../../../helpers/faceRecApi";
 
 jest.mock("../../../helpers/faceRecApi");
@@ -18,10 +17,8 @@ describe("webcam", () => {
 
     const { getByText } = render(
       <ApiContextProvider>
-        <RegistrationContextProvider>
-          <ApiStatus />
-          <WebcamComponent />
-        </RegistrationContextProvider>
+        <ApiStatus />
+        <WebcamComponent />
       </ApiContextProvider>
     );
     await screen.findByTestId("webcam-component");
@@ -39,10 +36,8 @@ describe("webcam", () => {
 
     const { getByText } = render(
       <ApiContextProvider>
-        <RegistrationContextProvider>
-          <ApiStatus />
-          <WebcamComponent />
-        </RegistrationContextProvider>
+        <ApiStatus />
+        <WebcamComponent />
       </ApiContextProvider>
     );
     await screen.findByTestId("webcam-component");

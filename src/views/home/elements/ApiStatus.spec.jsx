@@ -1,44 +1,45 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import * as ApiContext from "../../../components/contexts/ApiContext";
 import ApiStatus from "./ApiStatus";
 import { getApiStatus } from "../../../helpers/faceRecApi";
-import {
-  ApiContextProvider,
-  ApiContext,
-} from "../../../components/contexts/ApiContext";
-import { RegistrationContextProvider } from "../../../components/contexts/RegistrationContext";
 
 jest.mock("../../../helpers/faceRecApi");
 
 describe("ApiStatus", () => {
-  const mockApi = getApiStatus;
+  let mockContext = {};
+  const setApiFailedMock = jest.fn();
+  const setApiStatusMock = jest.fn();
+  const setTensorflowGpuMock = jest.fn();
+  const setProcessedFrameMock = jest.fn();
+  const setApiRetryTimeMock = jest.fn();
+
   beforeEach(() => {
-    mockApi.mockReturnValue({
-      status: "up",
-      tensorflowGpu: false,
-    });
+    mockContext.setApiFailed = setApiFailedMock;
+    mockContext.setApiStatus = setApiStatusMock;
+    mockContext.setTensorflowGpu = setTensorflowGpuMock;
+    mockContext.setProcessedFrame = setProcessedFrameMock;
+    mockContext.setApiRetryTime = setApiRetryTimeMock;
   });
 
-  // it("should show offline alert if no response is received from api", async () => {
-  //   mockApi.mockReturnValue({});
+  const mockApi = getApiStatus;
+  beforeEach(() => {
+    mockApi.mockReturnValue({});
+  });
 
-  //   const mockContext = {
-  //     apiFailed: true,
-  //     apiFailureCount: 3,
-  //   };
+  it("should show offline alert if api is offline", async () => {
+    mockContext.apiFailed = true;
+    jest
+      .spyOn(ApiContext, "useApiContext")
+      .mockImplementation(() => mockContext);
 
-  //   const { getByTestId } = render(
-  //     <ApiContext.Provider values={jest.fn()}>
-  //       <RegistrationContextProvider>
-  //         <ApiStatus />
-  //       </RegistrationContextProvider>
-  //     </ApiContext.Provider>
-  //   );
-  //   await screen.findByTestId("offlineAlert");
-  //   // console.log(getByTestId("apiStatus").textContent);
+    render(<ApiStatus />);
+    debug();
 
-  //   expect(screen.getByText("offline").toBeInTheDocument());
-  // });
+    // await screen.findByTestId("offlineAlert");
+    await screen.getByText(/^Python\ backend/);
+    expect(screen.getByTestId("offlineAlert").textContent).toBe("failed");
+  });
 
   // it("should not show offline alert if api is online", async () => {
   //   const { getByTestId } = render(

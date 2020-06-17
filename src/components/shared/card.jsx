@@ -10,20 +10,13 @@ const useStyles = makeStyles({
   },
 });
 
-function CardTitle(props) {
-  const hasTitle = props.title;
-  if (hasTitle) {
-    return <CardHeader title={props.title} />;
-  }
-}
-
 const MaterialCard = ({ children, ...props }) => {
   const classes = useStyles();
 
   return (
     <Grid item xs={6} className={classes.card}>
       <Card>
-        <CardTitle title={props.title} />
+        {props.title && <CardHeader title={props.title} />}
         {children}
       </Card>
     </Grid>

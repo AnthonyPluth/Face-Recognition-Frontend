@@ -1,14 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
 import MaterialCard from "../../../components/shared/card";
-import { ApiContext } from "../../../components/contexts/ApiContext";
+import { useApiContext } from "../../../components/contexts/ApiContext";
 
 // Make identity a dictionary containing name, confidence
 
 export default function RegistrationCard() {
-  const apiContext = useContext(ApiContext);
-  const { identity, confidence, processedFrame } = apiContext;
+  const { identity, confidence, processedFrame } = useApiContext();
 
   return (
     <MaterialCard title="Face Recognition">

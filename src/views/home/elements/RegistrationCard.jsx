@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Alert from "@material-ui/lab/Alert";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -9,16 +9,12 @@ import TextField from "@material-ui/core/TextField";
 import { useFormik } from "formik";
 import MaterialButton from "../../../components/shared/button";
 import MaterialCard from "../../../components/shared/card";
-import { RegistrationContext } from "../../../components/contexts/RegistrationContext";
+import { useApiContext } from "../../../components/contexts/ApiContext";
 import { apiTrainModel } from "../../../helpers/faceRecApi";
 
 export default function RegistrationCard() {
-  const registrationContext = useContext(RegistrationContext);
-  const { setNewUserName, isRecording, setIsRecording } = registrationContext;
-  const [modelTraining, setModelTraining] = useState({
-    status: "",
-    snackbarOpen: false,
-  });
+  const { setNewUserName, isRecording, setIsRecording } = useApiContext();
+  const [trainingStatus, setTrainingStatus] = useState("");
 
   const validate = (values) => {
     const errors = {};
@@ -36,23 +32,19 @@ export default function RegistrationCard() {
     validate,
     onSubmit: (values) => {
       setNewUserName(values.newUserName);
-      toggleRecording();
+      setIsRecording(!isRecording);
     },
   });
 
-  const toggleRecording = () => {
-    setIsRecording(!isRecording);
-  };
-
   const trainModel = async () => {
-    setModelTraining({ ...modelTraining, status: "in progress" });
+    setTrainingStatus("in progress");
     await apiTrainModel();
-    setModelTraining({ status: "completed", snackbarOpen: true });
+    setTrainingStatus("completed");
   };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
-    setModelTraining({ ...modelTraining, snackbarOpen: false });
+    setTrainingStatus("");
   };
 
   return (
@@ -63,6 +55,9 @@ export default function RegistrationCard() {
             autoFocus
             fullWidth
             id="newUserName"
+            inputProps={{
+              "data-testid": "newUserName",
+            }}
             variant="outlined"
             type="string"
             label="Name"
@@ -77,21 +72,27 @@ export default function RegistrationCard() {
             value={isRecording ? "Stop Recording" : "Start Recording"}
             type="submit"
           />
-          {modelTraining.status === "in progress" ? (
-            <CircularProgress />
+          {trainingStatus === "in progress" ? (
+            <CircularProgress data-testid="trainingInProgress" />
           ) : (
-            <MaterialButton onClick={trainModel} value="Train Model" />
+            <MaterialButton
+              data-testid="trainingButton"
+              onClick={trainModel}
+              value="Train Model"
+            />
           )}
         </CardActions>
       </form>
 
       <Snackbar
-        open={modelTraining.snackbarOpen}
+        open={trainingStatus === "completed"}
         onClose={handleClose}
         TransitionComponent={Slide}
+        autoHideDuration={10000}
+        data-testid="trainingComplete"
       >
         <Alert onClose={handleClose} severity="success">
-          Training completed; please restart the python API to reload the model
+          Model training is complete
         </Alert>
       </Snackbar>
     </MaterialCard>
