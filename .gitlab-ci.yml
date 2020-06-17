@@ -1,25 +1,46 @@
-image: node:12.14.1
+variables:
+  NPM_CACHE_DIR: "$CI_PROJECT_DIR/cache/npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
-stages:
-  - test
-  - deploy
+# cache using branch name
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - cache/npm
+    - cache/Cypress
 
-test_react:
-  stage: test
-  before_script:
-    - npm install
+# this job installs NPM dependencies and Cypress
+test:
+  image: cypress/base:12.16.2
   script:
-    - npm test
+    - npm install
+    # check Cypress binary path and cached versions
+    # useful to make sure we are not carrying around old versions
+    - npx cypress cache path
+    - npx cypress cache list
+    - npm run cypress:verify
+    # start the server, wait for it to respond, then run Cypress tests
+    - NODE_ENV=test npm test
+    # print coverage summary so that GitLab CI can parse the coverage number
+    - npx nyc report --reporter=text-summary
   artifacts:
+    when: always
     paths:
-      - coverage/
+      # save both cypress artifacts and coverage results
+      - coverage
+      - cypress/videos/*.mp4
+      - cypress/screenshots/*.png
+    expire_in: 10 days
 
 pages:
   stage: deploy
   dependencies:
-    - test_react
+    - test
   script:
-    - mv coverage/ public/
+    # delete everything in the current public folder
+    - rm -rf public/*
+    # replace with code coverage HTML report
+    - cp -r coverage/lcov-report/* public/
   artifacts:
     paths:
       - public
