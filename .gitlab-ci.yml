@@ -10,6 +10,9 @@ cache:
   paths:
     - node_modules/
 
+services:
+  - docker:19.03.11-dind
+    
 variables:
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
   DOCKER_HOST: tcp://docker:2376
@@ -34,6 +37,7 @@ install:
 
 build:
   stage: build
+  image: node:latest
   cache: 
     key: global_face_rec
     paths:
@@ -91,10 +95,8 @@ deploy-nginx:
     - master
   dependencies:
     - build
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script: 
-    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker pull $CI_REGISTRY_IMAGE/nginx:latest || true
     - docker build --cache-from $CI_REGISTRY_IMAGE/nginx:latest --tag $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE/nginx:latest .
     - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/nginx:latest
