@@ -13,7 +13,8 @@ cache:
 
 # installs NPM dependencies and Cypress
 test:
-  image: cypress/base:latest
+  image: cypress/browsers:node12.18.0-chrome83-ff77
+
   script:
     - npm install
     - npx cypress cache path
