@@ -11,7 +11,7 @@ cache:
 
 # installs NPM dependencies and Cypress
 .test_template:
-  image: cypress/base:12.16.2
+  image: cypress/base:latest
   script:
     - npm install
     - npx cypress cache path
@@ -39,7 +39,7 @@ pages:
     # delete everything in the current public folder
     - rm -rf public/*
     # replace with code coverage HTML report
-    - cp -r coverage/lcov-report/* public/
+    - cp -r coverage/* public/
   artifacts:
     paths:
       - public
