@@ -4,14 +4,11 @@ stages:
   - test
   - deploy
 
-image: cypress/browsers:node12.18.0-chrome83-ff77
-
 cache:
   key: global_face_rec
   untracked: true
   paths:
     - node_modules/
-    - cache/Cypress
 
 variables:
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
@@ -22,15 +19,25 @@ variables:
 
 install:
   stage: install
+  cache: 
+    key: global_face_rec
+    paths:
+      - node_modules/
   script:
     - npm ci
-    
+  only:
+    changes:
+      - package-lock.json
+      
 ###############################################################################
 
 build:
   stage: build
-  dependencies:
-    - install
+  cache: 
+    key: global_face_rec
+    paths:
+      - node_modules/
+    policy: pull
   script:
     - npm run build
   artifacts:
@@ -42,8 +49,11 @@ build:
 
 test:
   stage: test
-  dependencies:
-    - install
+  cache: 
+    key: global_face_rec
+    paths:
+      - node_modules/
+    policy: pull
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
     - npm run cypress:verify
@@ -83,7 +93,6 @@ deploy-nginx:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script: 
-    - npm run build
     - docker pull $CI_REGISTRY_IMAGE:latest || true
     - docker build --cache-from $CI_REGISTRY_IMAGE/nginx:latest --tag $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE/nginx:latest .
     - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
