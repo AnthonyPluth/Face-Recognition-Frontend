@@ -19,15 +19,16 @@ variables:
 
 install:
   stage: install
+  image: node:latest
   cache: 
     key: global_face_rec
     paths:
       - node_modules/
   script:
     - npm ci
-  only:
-    changes:
-      - package-lock.json
+  # only:
+  #   changes:
+  #     - package-lock.json
       
 ###############################################################################
 
