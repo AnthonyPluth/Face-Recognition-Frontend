@@ -28,7 +28,6 @@ install:
     key: global_face_rec
     paths:
       - node_modules/
-      - cache/Cypress/
   script:
     - npm ci
   only:
@@ -45,7 +44,7 @@ build:
     key: global_face_rec
     paths:
       - node_modules/
-    script:
+  script:
     - npm run build
   artifacts:
     paths:
