@@ -7,7 +7,7 @@ npm install
 
 ## Running the Frontend
 ```bash
-HTTPS=true SSL_CRT_FILE=../face_rec_backend/certs/certificate.pem SSL_KEY_FILE=../face_rec_backend/certs/key.pem npm start
+npm start
 ```
 
 ## Testing

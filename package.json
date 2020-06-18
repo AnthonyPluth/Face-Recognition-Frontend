@@ -27,7 +27,7 @@
   "scripts": {
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "cypress:run_ci": "cypress run --record --key $CYPRESS_KEY --parallel",
+    "cypress:run_ci": "cypress run --record --key $CYPRESS_KEY",
     "cypress:verify": "cypress verify",
     "test": "start-test 3000 cypress:run",
     "test_gitlab": "start-test 3000 cypress:run_ci",

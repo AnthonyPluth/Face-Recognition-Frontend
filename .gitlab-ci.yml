@@ -10,7 +10,7 @@ cache:
     - cache/Cypress
 
 # installs NPM dependencies and Cypress
-.test_template:
+test:
   image: cypress/base:latest
   script:
     - npm install
@@ -33,8 +33,7 @@ cache:
 pages:
   stage: deploy
   dependencies:
-    - test_runner_1
-    - test_runner_2
+    - test
   script:
     # delete everything in the current public folder
     - rm -rf public/*
@@ -46,8 +45,3 @@ pages:
     expire_in: 30 days
   only:
     - master
-
-test_runner_1:
-  extends: .test_template
-test_runner_2:
-  extends: .test_template
