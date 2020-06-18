@@ -7,13 +7,13 @@ stages:
 image: cypress/browsers:node12.18.0-chrome83-ff77
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
+  key: global_face_rec
+  untracked: true
   paths:
-    - cache/npm
+    - node_modules/
     - cache/Cypress
 
 variables:
-  NPM_CACHE_DIR: "$CI_PROJECT_DIR/cache/.npm"
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
@@ -24,12 +24,6 @@ install:
   stage: install
   script:
     - npm ci
-  artifacts:
-    expire_in: 60 mins
-    paths:
-      - .npm/
-      - node_modules
-      - cache/Cypress
     
 ###############################################################################
 
@@ -56,11 +50,11 @@ test:
     - NODE_ENV=test npm run test_gitlab
     - npm run coverage
   artifacts:
-    when: on_failure
+    when: always
     paths:
       - cypress/videos/*.mp4
       - cypress/screenshots/*.png
-      -  coverage
+      - coverage/
     expire_in: 10 days
 
 ###############################################################################
