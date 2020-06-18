@@ -9,12 +9,13 @@ cache:
   untracked: true
   paths:
     - node_modules/
+    - cache/Cypress
 
 services:
   - docker:19.03.11-dind
     
 variables:
-  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+  CYPRESS_CACHE_FOLDER: "cache/Cypress"
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
 
