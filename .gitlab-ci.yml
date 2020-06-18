@@ -26,8 +26,6 @@ build:
     paths:
       - build
     expire_in: 60 mins
-  dependencies:
-    - install
     
 ###############################################################################
 
