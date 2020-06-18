@@ -10,7 +10,7 @@ cache:
     - cache/Cypress
 
 # installs NPM dependencies and Cypress
-test:
+.test_template:
   image: cypress/base:12.16.2
   script:
     - npm install
@@ -45,3 +45,10 @@ pages:
     expire_in: 30 days
   only:
     - master
+
+test_runner_1:
+  extends: .test_template
+test_runner_2:
+  extends: .test_template
+test_runner_3:
+  extends: .test_template

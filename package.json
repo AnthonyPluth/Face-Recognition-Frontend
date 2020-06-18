@@ -28,9 +28,10 @@
   "scripts": {
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
+    "cypress:run_ci": "cypress run --record --key $CYPRESS_KEY --parallel",
     "cypress:verify": "cypress verify",
     "test": "start-test 3000 cypress:run",
-    "test_gitlab": "start-test 3000 cypress run --record --key $CYPRESS_KEY",
+    "test_gitlab": "start-test 3000 cypress:run_ci",
     "coverage": "nyc report --nycrc-path=.nycrc.json --reporter=text-summary",
     "coverage:html": "nyc report --nycrc-path=.nycrc.json --reporter=html",
     "start": "react-scripts -r @cypress/instrument-cra start",
