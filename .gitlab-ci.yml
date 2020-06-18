@@ -18,7 +18,7 @@ test:
     - npx cypress cache list
     - npm run cypress:verify
     # start the server, wait for it to respond, then run Cypress tests
-    - NODE_ENV=test npm test_gitlab
+    - NODE_ENV=test npm run test_gitlab
     # print coverage summary so GitLab CI can parse the coverage number
     - npm run coverage
   artifacts:
