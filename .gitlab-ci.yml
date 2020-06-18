@@ -50,22 +50,18 @@ test:
   stage: test
   dependencies:
     - install
-    - build
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
     - npm run cypress:verify
     - NODE_ENV=test npm run test_gitlab
     - npm run coverage
   artifacts:
-    - when: on_failure
-      paths:
-        - cypress/videos/*.mp4
-        - cypress/screenshots/*.png
-      expire_in: 10 days
-    - when: on_success
-      paths:
-        - coverage
-      expire_in: 60 mins
+    when: on_failure
+    paths:
+      - cypress/videos/*.mp4
+      - cypress/screenshots/*.png
+      -  coverage
+    expire_in: 10 days
 
 ###############################################################################
 
@@ -90,7 +86,6 @@ deploy-nginx:
     - master
   dependencies:
     - build
-    - test
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script: 
