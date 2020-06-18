@@ -7,11 +7,16 @@
 
 # testing
 /coverage
+/instrumented
+/.nyc_output
+*.mp4
 
 # production
 /build
+/.idea
 
 # misc
+*.iml
 .DS_Store
 .env.local
 .env.development.local

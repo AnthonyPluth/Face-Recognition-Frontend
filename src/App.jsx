@@ -1,10 +1,13 @@
 import React from "react";
-import HomeView from "./components/views/home/HomeView";
+import HomeView from "./views/home/Home";
+import { ApiContextProvider } from "./components/ApiContext";
 
 export const App = () => {
   return (
     <div style={{ overflow: "hidden" }}>
-      <HomeView />
+      <ApiContextProvider>
+        <HomeView />
+      </ApiContextProvider>
     </div>
   );
 };
