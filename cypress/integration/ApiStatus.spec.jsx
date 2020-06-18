@@ -38,6 +38,7 @@ context("API Status", () => {
 
   it("counts down until next retry", () => {
     cy.visit(Cypress.config("baseUrl"));
+    cy.wait(["@status"]);
     cy.get(".MuiAlert-message").should("contain", "trying again in ");
 
     cy.get(".MuiAlert-message").then(($val) => {
@@ -54,6 +55,7 @@ context("API Status", () => {
 
   it("hides offline alert when api is back online", () => {
     cy.visit(Cypress.config("baseUrl"));
+    cy.wait(["@status"]);
     cy.get(".MuiAlert-message").should("contain", "trying again in ");
 
     cy.route({
