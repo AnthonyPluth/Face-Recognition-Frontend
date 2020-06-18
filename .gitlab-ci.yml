@@ -14,15 +14,13 @@ test:
   image: cypress/base:12.16.2
   script:
     - npm install
-    # check Cypress binary path and cached versions
-    # useful to make sure we are not carrying around old versions
     - npx cypress cache path
     - npx cypress cache list
     - npm run cypress:verify
     # start the server, wait for it to respond, then run Cypress tests
-    - NODE_ENV=test npm test
+    - NODE_ENV=test npm test_gitlab
     # print coverage summary so GitLab CI can parse the coverage number
-    - npx nyc report --reporter=text-summary
+    - npm run coverage
   artifacts:
     when: always
     paths:
