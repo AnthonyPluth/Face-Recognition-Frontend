@@ -1,5 +1,6 @@
 {
   "projectId": "6jytyp",
   "baseUrl": "http://localhost:3000",
-  "testFiles": "**/*.spec.{js,jsx}"
+  "testFiles": "**/*.spec.{js,jsx}",
+  "video": true
 }

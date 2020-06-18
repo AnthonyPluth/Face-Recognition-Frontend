@@ -11,12 +11,11 @@ context("API Status", () => {
 
   beforeEach(() => {
     cy.server();
-    cy.route("/status").as("status");
+    cy.route({ url: "/status" }).as("status");
   });
 
   it("checks if api is available on loading", () => {
     cy.route({
-      method: "GET",
       url: "/status",
       response: {
         status: "up",
@@ -57,19 +56,20 @@ context("API Status", () => {
     cy.visit(Cypress.config("baseUrl"));
     cy.wait(["@status"]);
     cy.get("[data-testid=offlineAlert]").should("exist");
+    cy.get(".MuiAlert-message").should("contain", "trying again in ");
 
     cy.route({
-      method: "GET",
       url: "/status",
       response: {
         status: "up",
         tensorflowGpu: false,
         tensorflowVersion: "1.15.3",
       },
-    });
+    }).as("status");
 
     // wait for next ping to endpoint
-    cy.wait(11000);
-    cy.get("[data-testid=offlineAlert]").should("not.exist");
+    cy.wait(["@status"], { requestTimeout: 15000 }).then(() => {
+      cy.get("[data-testid=offlineAlert]").should("not.exist");
+    });
   });
 });

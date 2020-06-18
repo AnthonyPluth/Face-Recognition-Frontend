@@ -51,6 +51,6 @@ export const getApiStatus = async () => {
     );
     return response.data;
   } catch {
-    return {};
+    return null;
   }
 };

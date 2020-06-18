@@ -38,12 +38,15 @@ export default function ApiStatus() {
 
   const updateApiStatus = async () => {
     const apiResponse = await getApiStatus();
-    if (apiResponse !== {}) {
+    if (apiResponse !== null) {
+      console.log("received response");
       setTensorflowGpu(apiResponse.tensorflowGpu);
       setApiStatus(apiResponse.status);
       setApiFailed(false);
       setApiFailureCount(0);
     } else {
+      console.log("no response");
+
       setApiFailed(true);
       setApiFailureCount(apiFailureCount + 1);
       setApiRetryTime(Date.now() + 10000);
