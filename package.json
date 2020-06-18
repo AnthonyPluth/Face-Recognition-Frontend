@@ -30,7 +30,7 @@
     "coverage:html": "nyc report --nycrc-path=.nycrc.json --reporter=html",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run --browser chrome --headless",
-    "cypress:run_ci": "cypress run --record --key $CYPRESS_KEY",
+    "cypress:run_ci": "cypress run --record --key $CYPRESS_KEY --browser chrome --headless",
     "cypress:verify": "cypress verify",
     "dev": "start-server-and-test start http://localhost:3000 cypress:open",
     "start": "react-scripts -r @cypress/instrument-cra start",

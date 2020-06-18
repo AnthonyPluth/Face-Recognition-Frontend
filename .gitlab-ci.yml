@@ -1,62 +1,88 @@
-variables:
-  NPM_CACHE_DIR: "$CI_PROJECT_DIR/cache/npm"
-  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
-  DOCKER_HOST: tcp://docker:2376
-  DOCKER_TLS_CERTDIR: "/certs"
+stages:
+  - build
+  - test
+  - deploy
 
-# cache using branch name
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - cache/npm
     - cache/Cypress
 
-# installs NPM dependencies and Cypress
+variables:
+  NPM_CACHE_DIR: "$CI_PROJECT_DIR/cache/npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+
+###############################################################################
+
+build:
+  stage: build
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - build
+    expire_in: 60 mins
+  dependencies:
+    - install
+    
+###############################################################################
+
 test:
   image: cypress/browsers:node12.18.0-chrome83-ff77
-
   script:
     - npm install
     - npx cypress cache path
     - npx cypress cache list
     - npm run cypress:verify
-    # start the server, wait for it to respond, then run Cypress tests
     - NODE_ENV=test npm run test_gitlab
-    # print coverage summary so GitLab CI can parse the coverage number
     - npm run coverage
   artifacts:
-    when: always
+    when: on_failure
     paths:
-      # save both cypress artifacts and coverage results
-      - coverage
       - cypress/videos/*.mp4
       - cypress/screenshots/*.png
     expire_in: 10 days
 
+    when: on_success
+    paths:
+      - coverage
+    expire_in: 60 mins
+
+###############################################################################
+
 pages:
   stage: deploy
+  only:
+    - master
   dependencies:
     - test
   script:
-    # delete everything in the current public folder
     - rm -rf public/*
-    # replace with code coverage HTML report
     - cp -r coverage/* public/
   artifacts:
     paths:
       - public
     expire_in: 30 days
-  only:
-    - master
 
 deploy-nginx:
+  image: docker:19.03.11
+  stage: deploy
+  only:
+    - master
+  dependencies:
+    - build
+    - test
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  stage: deploy
-  image: docker:19.03.11
   script: 
     - npm run build
     - docker pull $CI_REGISTRY_IMAGE:latest || true
     - docker build --cache-from $CI_REGISTRY_IMAGE/nginx:latest --tag $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE/nginx:latest .
     - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/nginx:latest
+
+###############################################################################
