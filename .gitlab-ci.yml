@@ -35,7 +35,6 @@ pages:
   dependencies:
     - test_runner_1
     - test_runner_2
-    - test_runner_3
   script:
     # delete everything in the current public folder
     - rm -rf public/*
