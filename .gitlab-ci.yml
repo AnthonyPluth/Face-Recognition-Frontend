@@ -52,5 +52,3 @@ test_runner_1:
   extends: .test_template
 test_runner_2:
   extends: .test_template
-test_runner_3:
-  extends: .test_template
