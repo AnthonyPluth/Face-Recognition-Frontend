@@ -1,7 +1,10 @@
 stages:
+  - install
   - build
   - test
   - deploy
+
+image: cypress/browsers:node12.18.0-chrome83-ff77
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -10,17 +13,31 @@ cache:
     - cache/Cypress
 
 variables:
-  NPM_CACHE_DIR: "$CI_PROJECT_DIR/cache/npm"
+  NPM_CACHE_DIR: "$CI_PROJECT_DIR/cache/.npm"
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
 
 ###############################################################################
 
-build:
-  stage: build
+install:
+  stage: install
   script:
     - npm ci
+  artifacts:
+    expire_in: 60 mins
+    paths:
+      - .npm/
+      - node_modules
+      - cache/Cypress
+    
+###############################################################################
+
+build:
+  stage: build
+  dependencies:
+    - install
+  script:
     - npm run build
   artifacts:
     paths:
@@ -30,25 +47,25 @@ build:
 ###############################################################################
 
 test:
+  stage: test
+  dependencies:
+    - install
+    - build
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
-    - npm install
-    - npx cypress cache path
-    - npx cypress cache list
     - npm run cypress:verify
     - NODE_ENV=test npm run test_gitlab
     - npm run coverage
   artifacts:
-    when: on_failure
-    paths:
-      - cypress/videos/*.mp4
-      - cypress/screenshots/*.png
-    expire_in: 10 days
-
-    when: on_success
-    paths:
-      - coverage
-    expire_in: 60 mins
+    - when: on_failure
+      paths:
+        - cypress/videos/*.mp4
+        - cypress/screenshots/*.png
+      expire_in: 10 days
+    - when: on_success
+      paths:
+        - coverage
+      expire_in: 60 mins
 
 ###############################################################################
 
