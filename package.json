@@ -25,16 +25,16 @@
     "start-server-and-test": "1.11.0"
   },
   "scripts": {
+    "build": "react-scripts build",
+    "coverage": "nyc report --nycrc-path=.nycrc.json --reporter=text-summary",
+    "coverage:html": "nyc report --nycrc-path=.nycrc.json --reporter=html",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "cypress:run_ci": "cypress run --record --key $CYPRESS_KEY",
     "cypress:verify": "cypress verify",
     "test": "start-test 3000 cypress:run",
     "test_gitlab": "start-test 3000 cypress:run_ci",
-    "coverage": "nyc report --nycrc-path=.nycrc.json --reporter=text-summary",
-    "coverage:html": "nyc report --nycrc-path=.nycrc.json --reporter=html",
-    "start": "react-scripts -r @cypress/instrument-cra start",
-    "build": "node scripts/build.js"
+    "start": "react-scripts -r @cypress/instrument-cra start"
   },
   "browserslist": {
     "development": [
