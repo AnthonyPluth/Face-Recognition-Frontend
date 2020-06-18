@@ -9,7 +9,8 @@
 /coverage
 /instrumented
 /.nyc_output
-*.mp4
+/cypress/screenshots
+/cypress/videos
 
 # production
 /build

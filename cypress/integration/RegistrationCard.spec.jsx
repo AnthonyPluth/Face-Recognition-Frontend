@@ -50,7 +50,7 @@ context("Registration Card", () => {
     }).as("trainModel");
   });
 
-  it("should throw validation error if name not entered", () => {
+  it("throws validation error if name not entered", () => {
     cy.get('[type="submit"] > .MuiButton-label').click();
     cy.get(".MuiFormHelperText-root").should("contain", "Name is required");
 
@@ -60,7 +60,7 @@ context("Registration Card", () => {
     cy.requestsCount("recording").should("be", 0);
   });
 
-  it("should start recording if name provided", () => {
+  it("starts recording if name provided", () => {
     cy.get("[data-testid=newUserName]").type("test user");
     cy.get('[type="submit"] > .MuiButton-label').click();
 

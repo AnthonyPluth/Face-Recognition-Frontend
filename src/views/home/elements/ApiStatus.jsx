@@ -38,7 +38,7 @@ export default function ApiStatus() {
 
   const updateApiStatus = async () => {
     const apiResponse = await getApiStatus();
-    if (apiResponse !== {}) {
+    if (Object.keys(apiResponse).length !== 0) {
       setTensorflowGpu(apiResponse.tensorflowGpu);
       setApiStatus(apiResponse.status);
       setApiFailed(false);
