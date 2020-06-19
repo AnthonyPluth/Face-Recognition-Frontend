@@ -32,10 +32,10 @@
     "cypress:run": "cypress run --browser chrome --headless",
     "cypress:run_ci": "cypress run --record --key $CYPRESS_KEY --browser chrome --headless",
     "cypress:verify": "cypress verify",
-    "dev": "start-server-and-test start http://localhost:3000 cypress:open",
-    "start": "react-scripts -r @cypress/instrument-cra start",
-    "test": "start-server-and-test start http://localhost:3000 cypress:run",
-    "test_gitlab": "start-server-and-test start http://localhost:3000 cypress:run_ci"
+    "dev": "NODE_ENV=development start-server-and-test start http://localhost:3000 cypress:open",
+    "start": "NODE_ENV=development react-scripts -r @cypress/instrument-cra start",
+    "test": "NODE_ENV=development start-server-and-test start http://localhost:3000 cypress:run",
+    "test_gitlab": "NODE_ENV=development start-server-and-test start http://localhost:3000 cypress:run_ci"
   },
   "browserslist": {
     "development": [

@@ -21,7 +21,7 @@ export default function ApiStatus() {
     setApiStatus,
     setConfidence,
     setIdentity,
-    setProcessedFrame,
+    setBoundingBoxes,
     setTensorflowGpu,
   } = useApiContext();
 
@@ -39,14 +39,11 @@ export default function ApiStatus() {
   const updateApiStatus = async () => {
     const apiResponse = await getApiStatus();
     if (apiResponse !== null) {
-      console.log("received response");
       setTensorflowGpu(apiResponse.tensorflowGpu);
       setApiStatus(apiResponse.status);
       setApiFailed(false);
       setApiFailureCount(0);
     } else {
-      console.log("no response");
-
       setApiFailed(true);
       setApiFailureCount(apiFailureCount + 1);
       setApiRetryTime(Date.now() + 10000);
@@ -54,27 +51,32 @@ export default function ApiStatus() {
   };
 
   const handleRecordedFrame = async (rawFrame) => {
-    try {
-      const apiResponse = await recordSnapshot(newUserName, rawFrame);
-      if (apiResponse !== null) {
-        setProcessedFrame(apiResponse.framed_image);
-      }
-    } catch (error) {
+    const apiResponse = await recordSnapshot(newUserName, rawFrame);
+    if (apiResponse !== null) {
+      setApiFailureCount(0);
+    } else {
       setApiFailureCount(apiFailureCount + 1);
     }
+    handleApiResponse(apiResponse);
   };
 
   const handleIdentifyFrame = async (rawFrame) => {
-    try {
-      const apiResponse = await getIdentityFromSnapshot(rawFrame);
-      if (apiResponse !== null) {
-        setProcessedFrame(apiResponse.framed_image);
-        setIdentity(apiResponse.name);
-        setConfidence(apiResponse.confidence);
-        setApiFailureCount(0);
-      }
-    } catch (error) {
+    const apiResponse = await getIdentityFromSnapshot(rawFrame);
+    if (apiResponse !== null) {
+      setApiFailureCount(0);
+    } else {
       setApiFailureCount(apiFailureCount + 1);
+    }
+    handleApiResponse(apiResponse);
+  };
+
+  const handleApiResponse = (apiResponse) => {
+    if (apiResponse !== (null || undefined)) {
+      setIdentity(apiResponse.name);
+      setConfidence(apiResponse.confidence);
+      setBoundingBoxes(apiResponse.bboxes);
+    } else {
+      setBoundingBoxes([{ x: 0, y: 0, w: 0, h: 0 }]);
     }
   };
 
@@ -99,6 +101,7 @@ export default function ApiStatus() {
   useEffect(() => {
     // send frame to appropriate endpoint
     if (!apiFailed) {
+      console.log("recording", isRecording);
       isRecording ? handleRecordedFrame(frame) : handleIdentifyFrame(frame);
     }
   }, [frame]);

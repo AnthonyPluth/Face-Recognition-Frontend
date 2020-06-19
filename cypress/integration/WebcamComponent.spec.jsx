@@ -9,8 +9,7 @@ context("Webcam component", () => {
       response: {
         name: "WebcamComponent",
         confidence: 90.0,
-        framed_image:
-          "UklGRjgAAABXRUJQVlA4ICwAAACQAQCdASoBAAEAAgA0JaACdLoAA5gA/vmTb/+QH/+QH/+QH/8gP+IXexhQAA==",
+        bboxes: [{ x: 0, y: 0, w: 0, h: 0 }],
       },
     }).as("identify");
   });

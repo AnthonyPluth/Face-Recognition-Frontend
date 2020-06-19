@@ -10,7 +10,6 @@ context("Face Rec Card", () => {
   );
 
   beforeEach(() => {
-    cy.visit(Cypress.config("baseUrl"));
     cy.server();
     cy.route({
       method: "GET",
@@ -28,10 +27,11 @@ context("Face Rec Card", () => {
       response: {
         name: "FaceRecCard",
         confidence: 23.652345,
-        framed_image:
-          "UklGRjgAAABXRUJQVlA4ICwAAACQAQCdASoBAAEAAgA0JaACdLoAA5gA/vmTb/+QH/+QH/+QH/8gP+IXexhQAA==",
+        bboxes: [{ x: 0, y: 0, w: 0, h: 0 }],
       },
     }).as("identify");
+
+    cy.visit(Cypress.config("baseUrl"));
   });
 
   it("shows name/confidence when person is recognized", () => {
@@ -41,8 +41,7 @@ context("Face Rec Card", () => {
       response: {
         name: "Joe",
         confidence: 23.652345,
-        framed_image:
-          "UklGRjgAAABXRUJQVlA4ICwAAACQAQCdASoBAAEAAgA0JaACdLoAA5gA/vmTb/+QH/+QH/+QH/8gP+IXexhQAA==",
+        bboxes: [{ x: 0, y: 0, w: 0, h: 0 }],
       },
     }).as("identify");
 
@@ -61,8 +60,7 @@ context("Face Rec Card", () => {
       response: {
         name: "FaceRecCard",
         confidence: 23.652345,
-        framed_image:
-          "UklGRjgAAABXRUJQVlA4ICwAAACQAQCdASoBAAEAAgA0JaACdLoAA5gA/vmTb/+QH/+QH/+QH/8gP+IXexhQAA==",
+        bboxes: [{ x: 0, y: 0, w: 0, h: 0 }],
       },
     }).as("identify");
 

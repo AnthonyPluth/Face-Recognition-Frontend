@@ -10,7 +10,6 @@ context("Registration Card", () => {
   );
 
   beforeEach(() => {
-    cy.visit(Cypress.config("baseUrl"));
     cy.server();
     cy.route({
       method: "GET",
@@ -28,8 +27,7 @@ context("Registration Card", () => {
       response: {
         name: "test",
         confidence: 23.652345,
-        framed_image:
-          "UklGRjgAAABXRUJQVlA4ICwAAACQAQCdASoBAAEAAgA0JaACdLoAA5gA/vmTb/+QH/+QH/+QH/8gP+IXexhQAA==",
+        bboxes: [{ x: 0, y: 0, w: 0, h: 0 }],
       },
     }).as("identify");
 
@@ -37,8 +35,7 @@ context("Registration Card", () => {
       method: "POST",
       url: "/add_person/*",
       response: {
-        framed_image:
-          "UklGRkAAAABXRUJQVlA4IDQAAADwAQCdASoBAAEAAQAcJaACdLoB+AAETAAA/vW4f/6aR40jxpHxcP/ugT90CfugT/3NoAAA",
+        bboxes: [{ x: 0, y: 0, w: 0, h: 0 }],
       },
     }).as("recording");
 
@@ -48,6 +45,8 @@ context("Registration Card", () => {
       response: { "training status": "complete" },
       delay: 1000,
     }).as("trainModel");
+
+    cy.visit(Cypress.config("baseUrl"));
   });
 
   it("throws validation error if name not entered", () => {

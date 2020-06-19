@@ -15,9 +15,7 @@ export const getIdentityFromSnapshot = async (snapshot) => {
   if (validBase64(b64_snapshot)) {
     const response = await axios.post(
       `http://${process.env.REACT_APP_API_URI}:5000/identify`,
-      {
-        body: b64_snapshot,
-      }
+      b64_snapshot
     );
     return response.data;
   }
