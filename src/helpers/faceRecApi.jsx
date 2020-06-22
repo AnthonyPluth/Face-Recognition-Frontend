@@ -26,9 +26,7 @@ export const recordSnapshot = async (name, snapshot) => {
   if (validBase64(b64_snapshot)) {
     const response = await axios.post(
       `${process.env.REACT_APP_API_URI}/add_person/${name}`,
-      {
-        body: b64_snapshot,
-      }
+      b64_snapshot
     );
     return response.data;
   }
