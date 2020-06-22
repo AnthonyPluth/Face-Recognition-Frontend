@@ -6,9 +6,7 @@ export const ApiContextProvider = ({ children }) => {
   const [apiStatus, setApiStatus] = useState("down");
   const [tensorflowGpu, setTensorflowGpu] = useState(false);
   const [tensorflowVersion, setTensorflowVersion] = useState();
-  const [boundingBoxes, setBoundingBoxes] = useState([
-    { x: 0, y: 0, w: 0, h: 0 },
-  ]);
+  const [boundingBoxes, setBoundingBoxes] = useState([]);
   const [apiFailed, setApiFailed] = useState(false);
   const [identity, setIdentity] = useState();
   const [confidence, setConfidence] = useState();
