@@ -14,7 +14,7 @@ export const getIdentityFromSnapshot = async (snapshot) => {
   const b64_snapshot = JSON.stringify({ snapshot });
   if (validBase64(b64_snapshot)) {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URI}:5000/identify`,
+      `${process.env.REACT_APP_API_URI}/identify`,
       b64_snapshot
     );
     return response.data;
@@ -25,7 +25,7 @@ export const recordSnapshot = async (name, snapshot) => {
   const b64_snapshot = JSON.stringify({ snapshot });
   if (validBase64(b64_snapshot)) {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URI}:5000/add_person/${name}`,
+      `${process.env.REACT_APP_API_URI}/add_person/${name}`,
       {
         body: b64_snapshot,
       }
@@ -36,16 +36,14 @@ export const recordSnapshot = async (name, snapshot) => {
 
 export const apiTrainModel = async () => {
   const response = await axios.get(
-    `${process.env.REACT_APP_API_URI}:5000/train_model`
+    `${process.env.REACT_APP_API_URI}/train_model`
   );
   return response.data;
 };
 
 export const getApiStatus = async () => {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_URI}:5000/status`
-    );
+    const response = await axios.get(`${process.env.REACT_APP_API_URI}/status`);
     return response.data;
   } catch {
     return null;

@@ -101,7 +101,6 @@ export default function ApiStatus() {
   useEffect(() => {
     // send frame to appropriate endpoint
     if (!apiFailed) {
-      console.log("recording", isRecording);
       isRecording ? handleRecordedFrame(frame) : handleIdentifyFrame(frame);
     }
   }, [frame]);
