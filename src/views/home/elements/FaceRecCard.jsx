@@ -3,6 +3,7 @@ import Webcam from "react-webcam";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
 import MaterialCard from "../../../components/card";
+import BoundingBoxes from "../../../components/BoundingBoxes";
 import { useApiContext } from "../../../components/ApiContext";
 
 export default function RegistrationCard() {
@@ -77,26 +78,11 @@ export default function RegistrationCard() {
             minScreenshotWidth={maxScreenshotWidth}
             screenshotFormat="image/webp"
           />
-          <svg
-            viewBox={`-8 0 ${maxScreenshotWidth} ${maxScreenshotWidth * 0.75}`}
-            style={{
-              position: "absolute",
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-            }}
-          >
-            <rect
-              id="boundingbox"
-              x={boundingBoxes[0].x}
-              y={boundingBoxes[0].y}
-              width={boundingBoxes[0].w}
-              height={boundingBoxes[0].h}
-              strokeWidth={3}
-              stroke="#eb4034"
-              fillOpacity="0"
-            />
-          </svg>
+
+          <BoundingBoxes
+            boundingBoxes={boundingBoxes}
+            maxScreenshotWidth={maxScreenshotWidth}
+          />
         </div>
       </CardContent>
     </MaterialCard>
