@@ -14,19 +14,20 @@ const BoundingBoxes = (props) => {
         justifyContent: "center",
       }}
     >
-      {bboxes.map((bbox, index) => (
-        <rect
-          key={index}
-          id="boundingbox"
-          x={bbox.x}
-          y={bbox.y}
-          width={bbox.w}
-          height={bbox.h}
-          strokeWidth={3}
-          stroke="#eb4034"
-          fillOpacity="0"
-        />
-      ))}
+      {bboxes !== undefined &&
+        bboxes.map((bbox, index) => (
+          <rect
+            key={index}
+            id="boundingbox"
+            x={bbox.x}
+            y={bbox.y}
+            width={bbox.w}
+            height={bbox.h}
+            strokeWidth={3}
+            stroke="#eb4034"
+            fillOpacity="0"
+          />
+        ))}
     </svg>
   );
 };

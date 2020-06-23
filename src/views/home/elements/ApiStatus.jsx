@@ -74,7 +74,7 @@ export default function ApiStatus() {
     if (apiResponse !== (null || undefined)) {
       setIdentity(apiResponse.name);
       setConfidence(apiResponse.confidence);
-      setBoundingBoxes(apiResponse.bboxes);
+      setBoundingBoxes(apiResponse.bounding_boxes);
     }
   };
 
