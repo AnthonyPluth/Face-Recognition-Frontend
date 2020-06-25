@@ -1,9 +1,9 @@
 {
   "presets":[
-     "@babel/preset-react"
+     "react-app"
   ],
   "env":{
-     "test":{
+     "test_cypress":{
         "plugins":[
            [
               "istanbul",

@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import MaterialCard from "../../../components/card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import { ApiContext } from "../../../components/ApiContext";
+import { useApiContext } from "../../../components/ApiContext";
 
 export const WebcamComponent = () => {
-  const { framerate, maxScreenshotWidth } = useContext(ApiContext);
+  const { framerate, maxScreenshotWidth } = useApiContext();
 
   return (
     <MaterialCard title="Stats" data-testid="webcam-component">

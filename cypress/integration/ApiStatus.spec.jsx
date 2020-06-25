@@ -11,7 +11,10 @@ context("API Status", () => {
 
   beforeEach(() => {
     cy.server();
-    cy.route({ url: "/status" }).as("status");
+
+    cy.route({
+      url: "/status",
+    }).as("status");
   });
 
   it("checks if api is available on loading", () => {

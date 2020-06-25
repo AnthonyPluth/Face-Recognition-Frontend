@@ -28,13 +28,14 @@
     "build": "NODE_ENV=production CI=false react-scripts build",
     "coverage": "nyc report --nycrc-path=.nycrc.json --reporter=text-summary",
     "coverage:html": "nyc report --nycrc-path=.nycrc.json --reporter=html",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run --browser chrome --headless",
-    "cypress:run_ci": "cypress run --record --key $CYPRESS_KEY --browser chrome --headless",
+    "cypress:open": "BABEL_ENV=test_cypress cypress open",
+    "cypress:run": "BABEL_ENV=test_cypress cypress run --browser chrome --headless",
+    "cypress:run_ci": "BABEL_ENV=test_cypress cypress run --record --key $CYPRESS_KEY --browser chrome --headless",
     "cypress:verify": "cypress verify",
     "dev": "NODE_ENV=development start-server-and-test start http://localhost:3000 cypress:open",
     "start": "NODE_ENV=development react-scripts -r @cypress/instrument-cra start",
-    "test": "NODE_ENV=development start-server-and-test start http://localhost:3000 cypress:run",
+    "test:e2e": "NODE_ENV=development start-server-and-test start http://localhost:3000 cypress:run",
+    "test:unit": "jest --coverage",
     "test_gitlab": "NODE_ENV=development start-server-and-test start http://localhost:3000 cypress:run_ci"
   },
   "browserslist": {
@@ -50,16 +51,20 @@
   "devDependencies": {
     "@cypress/code-coverage": "3.8.1",
     "@cypress/instrument-cra": "1.1.1",
+    "@testing-library/react": "10.4.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-plugin-istanbul": "6.0.0",
     "babel-plugin-transform-class-properties": "6.24.1",
-    "cypress": "4.8.0",
+    "cypress": "4.9.0",
     "cypress-react-unit-test": "4.7.2",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
+    "history": "5.0.0",
     "istanbul-lib-coverage": "2.0.5",
+    "jest-environment-jsdom-sixteen": "1.0.3",
     "mocha": "8.0.1",
-    "nyc": "14.1.1"
+    "nyc": "14.1.1",
+    "react-router-dom": "5.2.0"
   },
   "eslintConfig": {
     "extends": "react-app"
