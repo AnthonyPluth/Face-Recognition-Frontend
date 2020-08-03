@@ -1,4 +1,8 @@
+include:
+  - template: Secret-Detection.gitlab-ci.yml
+
 stages:
+  - secret_detection
   - install
   - build
   - test
@@ -18,6 +22,12 @@ variables:
   CYPRESS_CACHE_FOLDER: "cache/Cypress"
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
+
+###############################################################################
+
+secret_detection:
+  variables:
+    SECRET_DETECTION_HISTORIC_SCAN: "true"
 
 ###############################################################################
 
