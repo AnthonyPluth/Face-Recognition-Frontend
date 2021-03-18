@@ -9,9 +9,10 @@ stages:
   - deploy
 
 cache:
-  key: global_face_rec
+  key: ${CI_COMMIT_REF_SLUG}
   untracked: true
   paths:
+    - .npm
     - node_modules/
     - cache/Cypress/
 
@@ -34,26 +35,18 @@ secret_detection:
 install:
   stage: install
   image: node:latest
-  cache: 
-    key: global_face_rec
-    paths:
-      - node_modules/
   script:
     - npm ci
-  only:
-    changes:
-      - package-lock.json
+  artifacts:
+    paths:
+      - node_modules/
       
 ###############################################################################
 
 build:
   stage: build
+  needs: ["install"]
   image: node:latest
-  cache: 
-    policy: pull
-    key: global_face_rec
-    paths:
-      - node_modules/
   script:
     - npm run build
   artifacts:
@@ -65,12 +58,6 @@ build:
 
 test:
   stage: test
-  cache: 
-    policy: pull
-    key: global_face_rec
-    paths:
-      - node_modules/
-      - cache/Cypress/
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
     - npm install cypress
