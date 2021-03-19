@@ -39,7 +39,7 @@ install:
 
 build:
   stage: build
-  needs: ["install"]
+  # needs: ["install"]
   image: node:latest
   cache:
     policy: pull
