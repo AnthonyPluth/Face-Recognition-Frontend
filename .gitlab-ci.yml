@@ -3,8 +3,8 @@ include:
 
 stages:
   - install
-  - secret_detection
   - build
+  - secret_detection
   - test
   - deploy
 
