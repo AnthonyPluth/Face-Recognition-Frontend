@@ -1,49 +1,53 @@
 /// <reference types="cypress" />
 
 context("Registration Card", () => {
-  Cypress.Commands.add("requestsCount", (alias) =>
-    cy
-      .wrap()
-      .then(
-        () => cy.state("requests").filter((req) => req.alias === alias).length
-      )
-  );
+  const getAliasCount = (alias) => {
+    // implementation details, use at your own risk
+    const testRoutes = cy.state('routes')
+    const aliasRoute = Cypress._.find(testRoutes, { alias })
+  
+    if (!aliasRoute) {
+      return
+    }
+  
+    return Cypress._.keys(aliasRoute.requests || {}).length
+  }
+
 
   beforeEach(() => {
-    cy.server();
-    cy.route({
-      method: "GET",
-      url: "/status",
-      response: {
+    const delay = 1000
+
+    cy.intercept(
+      "/status",
+      {
         status: "up",
         tensorflowGpu: false,
         tensorflowVersion: "1.15.3",
-      },
-    });
+      }
+    );
 
-    cy.route({
-      method: "POST",
-      url: "/identify",
-      response: {
+    cy.intercept(
+      "/identify",
+      {
         name: "test",
         confidence: 23.652345,
         bboxes: [{ x: 0, y: 0, w: 0, h: 0 }],
       },
-    }).as("identify");
+    ).as("identify");
 
-    cy.route({
-      method: "POST",
-      url: "/add_person/*",
-      response: {
+    cy.intercept(
+      "/add_person/*",
+      {
         bboxes: [{ x: 0, y: 0, w: 0, h: 0 }],
       },
-    }).as("recording");
-
-    cy.route({
-      method: "GET",
-      url: "/train_model",
-      response: { "training status": "complete" },
-      delay: 1000,
+    ).as("recording");
+    
+    cy.intercept(
+      '/train_model', 
+      {
+        statusCode: 200,
+        body: { "training status": "complete" },
+        delay
     }).as("trainModel");
 
     cy.visit(Cypress.config("baseUrl"));
@@ -54,9 +58,11 @@ context("Registration Card", () => {
     cy.get(".MuiFormHelperText-root").should("contain", "Name is required");
 
     // should be hitting identify endpoint
-    cy.wait("@identify");
-    cy.requestsCount("identify").should("be.greaterThan", 0);
-    cy.requestsCount("recording").should("be", 0);
+    cy.wait("@identify")
+    .then(() => {
+      expect(getAliasCount('identify')).to.be.greaterThan(0)
+      expect(getAliasCount('recording')).to.equal(0)
+    })
   });
 
   it("starts recording if name provided", () => {
@@ -64,8 +70,10 @@ context("Registration Card", () => {
     cy.get('[type="submit"] > .MuiButton-label').click();
 
     // should be hitting recording endpoint
-    cy.wait("@recording");
-    cy.requestsCount("recording").should("be.greaterThan", 0);
+    cy.wait("@recording")
+    .then(() => {
+      expect(getAliasCount('recording')).to.be.greaterThan(0)
+    })
   });
 
   it("test training model", () => {
@@ -94,10 +102,8 @@ context("Registration Card", () => {
     cy.get("[data-testid=trainingButton] > .MuiButton-label").click();
 
     // wait to receive success response
-    cy.wait(["@trainModel"]);
-
-    // wait for snackbar to timeout
-    cy.wait(6000).then(() => {
+    cy.wait(["@trainModel"]).then(() => {
+      cy.wait(6000)
       cy.get("[data-testid=trainingComplete] > .MuiPaper-root").should(
         "not.exist"
       );

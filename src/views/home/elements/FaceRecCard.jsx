@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import Webcam from "react-webcam";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
@@ -25,13 +25,13 @@ export default function RegistrationCard() {
     setFrame(webcamRef.current.getScreenshot());
   }, [setFrame, webcamRef]);
 
-  const adjustFramerate = (usingGPU) => {
+  const adjustFramerate = useCallback((usingGPU) => {
     setFramerate(usingGPU ? 50 : 200);
-  };
+  }, [setFramerate]);
 
-  const adjustScreenshotWidth = (usingGPU) => {
+  const adjustScreenshotWidth = useCallback((usingGPU) => {
     setMaxScreenshotWidth(usingGPU ? 640 : 250);
-  };
+  }, [setMaxScreenshotWidth]);
 
   useEffect(() => {
     // update framerate & frame size when tensorFlow GPU state changes
@@ -42,7 +42,7 @@ export default function RegistrationCard() {
       getFrame();
     }, framerate);
     return () => clearInterval(interval);
-  }, [tensorflowGpu]);
+  }, [adjustFramerate, adjustScreenshotWidth, framerate, getFrame, tensorflowGpu]);
 
   return (
     <MaterialCard title="Face Recognition">

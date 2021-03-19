@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="1.3700" tests="2" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-03-19T21:49:43" tests="0" file="cypress/integration/FaceRecCard.spec.jsx" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="Face Rec Card" timestamp="2021-03-19T21:49:43" tests="2" time="1.3700" failures="0">
+    <testcase name="Face Rec Card shows name/confidence when person is recognized" time="0.9410" classname="shows name/confidence when person is recognized">
+    </testcase>
+    <testcase name="Face Rec Card does not display name when person not recognized" time="0.4290" classname="does not display name when person not recognized">
+    </testcase>
+  </testsuite>
+</testsuites>

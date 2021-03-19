@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.0000" tests="4" failures="4">
+  <testsuite name="Root Suite" timestamp="2021-03-19T19:09:22" tests="0" file="cypress/integration/ApiStatus.spec.jsx" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="API Status" timestamp="2021-03-19T19:09:22" tests="4" time="0.0000" failures="4">
+    <testcase name="API Status checks if api is available on loading" time="0.0000" classname="checks if api is available on loading">
+      <failure message="expected 0 to be above 0" type="AssertionError"><![CDATA[AssertionError: expected 0 to be above 0
+    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress/integration/ApiStatus.spec.jsx:115:32)]]></failure>
+    </testcase>
+    <testcase name="API Status shows offline alert if api is offline" time="0.0000" classname="shows offline alert if api is offline">
+      <failure message="Timed out retrying after 4000ms: Expected to find element: `[data-testid=offlineAlert]`, but never found it." type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-testid=offlineAlert]`, but never found it.
+    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress/integration/ApiStatus.spec.jsx:120:42)]]></failure>
+    </testcase>
+    <testcase name="API Status counts down until next retry" time="0.0000" classname="counts down until next retry">
+      <failure message="Timed out retrying after 4000ms: Expected to find element: `[data-testid=offlineAlert]`, but never found it." type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-testid=offlineAlert]`, but never found it.
+    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress/integration/ApiStatus.spec.jsx:125:42)]]></failure>
+    </testcase>
+    <testcase name="API Status hides offline alert when api is back online" time="0.0000" classname="hides offline alert when api is back online">
+      <failure message="Timed out retrying after 4000ms: Expected to find element: `[data-testid=offlineAlert]`, but never found it." type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 4000ms: Expected to find element: `[data-testid=offlineAlert]`, but never found it.
+    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress/integration/ApiStatus.spec.jsx:138:42)]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

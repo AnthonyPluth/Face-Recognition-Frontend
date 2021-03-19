@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.0000" tests="5" failures="5">
+  <testsuite name="Root Suite" timestamp="2021-03-19T20:20:02" tests="0" file="cypress/integration/ApiStatus.spec.jsx" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="API Status" timestamp="2021-03-19T20:20:02" tests="5" time="0.0000" failures="5">
+    <testcase name="API Status makes 3 calls" time="0.0000" classname="makes 3 calls">
+      <failure message="The following error originated from your test code, not from Cypress.
+
+  &gt; `req.reply()` was provided a callback to intercept the upstream response, but a network error occurred while making the request:
+
+Error: connect ECONNREFUSED 127.0.0.1:5000
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1141:16)
+
+Route: {
+  &quot;matchUrlAgainstPath&quot;: true,
+  &quot;url&quot;: &quot;/status&quot;
+}
+
+Intercepted request: {
+  &quot;headers&quot;: {
+    &quot;host&quot;: &quot;localhost:5000&quot;,
+    &quot;proxy-connection&quot;: &quot;keep-alive&quot;,
+    &quot;accept&quot;: &quot;application/json, text/plain, */*&quot;,
+    &quot;user-agent&quot;: &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/89.0.4389.90 Safari/537.36&quot;,
+    &quot;origin&quot;: &quot;http://localhost:3000&quot;,
+    &quot;sec-fetch-site&quot;: &quot;same-site&quot;,
+    &quot;sec-fetch-mode&quot;: &quot;cors&quot;,
+    &quot;sec-fetch-dest&quot;: &quot;empty&quot;,
+    &quot;referer&quot;: &quot;http://localhost:3000/&quot;,
+    &quot;accept-encoding&quot;: &quot;gzip, deflate, br&quot;,
+    &quot;accept-language&quot;: &quot;en-US&quot;
+  },
+  &quot;url&quot;: &quot;http://localhost:5000/status&quot;,
+  &quot;method&quot;: &quot;GET&quot;,
+  &quot;httpVersion&quot;: &quot;1.1&quot;,
+  &quot;body&quot;: &quot;&quot;,
+  &quot;responseTimeout&quot;: 30000
+}
+
+When Cypress detects uncaught errors originating from your test code it will automatically fail the current test." type="CypressError"><![CDATA[CypressError: The following error originated from your test code, not from Cypress.
+
+  > `req.reply()` was provided a callback to intercept the upstream response, but a network error occurred while making the request:
+
+Error: connect ECONNREFUSED 127.0.0.1:5000
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1141:16)
+
+Route: {
+  "matchUrlAgainstPath": true,
+  "url": "/status"
+}
+
+Intercepted request: {
+  "headers": {
+    "host": "localhost:5000",
+    "proxy-connection": "keep-alive",
+    "accept": "application/json, text/plain, */*",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/89.0.4389.90 Safari/537.36",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br",
+    "accept-language": "en-US"
+  },
+  "url": "http://localhost:5000/status",
+  "method": "GET",
+  "httpVersion": "1.1",
+  "body": "",
+  "responseTimeout": 30000
+}
+
+When Cypress detects uncaught errors originating from your test code it will automatically fail the current test.
+    at cypressErr (http://localhost:3000/__cypress/runner/cypress_runner.js:174213:18)
+    at errByPath (http://localhost:3000/__cypress/runner/cypress_runner.js:174264:10)
+    at onRequestComplete (http://localhost:3000/__cypress/runner/cypress_runner.js:165790:83)
+    at http://localhost:3000/__cypress/runner/cypress_runner.js:165744:14
+    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:10765:23)
+    at Function.Promise.attempt.Promise.try (http://localhost:3000/__cypress/runner/cypress_runner.js:8039:29)
+    at $Cypress.<anonymous> (http://localhost:3000/__cypress/runner/cypress_runner.js:165742:56)
+    at $Cypress.../driver/node_modules/eventemitter2/lib/eventemitter2.js.EventEmitter.emit (http://localhost:3000/__cypress/runner/cypress_runner.js:86008:19)
+    at $Cypress.parent.<computed> [as emit] (http://localhost:3000/__cypress/runner/cypress_runner.js:174410:31)
+    at Socket.<anonymous> (http://localhost:3000/__cypress/runner/cypress_runner.js:197390:17)
+    at Socket.../../node_modules/component-emitter/index.js.Emitter.emit (http://localhost:3000/__cypress/runner/cypress_runner.js:14895:20)
+    at Socket.emitEvent (http://localhost:3000/__cypress/runner/cypress_runner.js:193070:20)
+    at Socket.onevent (http://localhost:3000/__cypress/runner/cypress_runner.js:193057:18)
+    at Socket.onpacket (http://localhost:3000/__cypress/runner/cypress_runner.js:193021:22)
+    at Manager.<anonymous> (http://localhost:3000/__cypress/runner/cypress_runner.js:14741:15)
+    at Manager.../../node_modules/component-emitter/index.js.Emitter.emit (http://localhost:3000/__cypress/runner/cypress_runner.js:14895:20)
+From Your Spec Code:
+    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress/integration/ApiStatus.spec.jsx:114:8)
+From Your Spec Code:
+    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress/integration/ApiStatus.spec.jsx:114:8)]]></failure>
+    </testcase>
+    <testcase name="API Status checks if api is available on loading" time="0.0000" classname="checks if api is available on loading">
+      <failure message="expected 0 to be above 0" type="AssertionError"><![CDATA[AssertionError: expected 0 to be above 0
+    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress/integration/ApiStatus.spec.jsx:135:25)]]></failure>
+    </testcase>
+    <testcase name="API Status shows offline alert if api is offline" time="0.0000" classname="shows offline alert if api is offline">
+      <failure message="`cy.wait()` could not find a registered alias for: `@status`.
+You have not aliased anything yet." type="CypressError"><![CDATA[CypressError: `cy.wait()` could not find a registered alias for: `@status`.
+You have not aliased anything yet.
+    at aliasNotFoundFor (http://localhost:3000/__cypress/runner/cypress_runner.js:151590:22)
+    at $Cy.getAlias (http://localhost:3000/__cypress/runner/cypress_runner.js:151553:7)
+    at waitForXhr (http://localhost:3000/__cypress/runner/cypress_runner.js:161338:23)
+    at http://localhost:3000/__cypress/runner/cypress_runner.js:161469:14
+    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:10765:23)
+    at MappingPromiseArray._promiseFulfilled (http://localhost:3000/__cypress/runner/cypress_runner.js:7885:38)
+    at MappingPromiseArray.PromiseArray._iterate (http://localhost:3000/__cypress/runner/cypress_runner.js:9087:31)
+    at MappingPromiseArray.init (http://localhost:3000/__cypress/runner/cypress_runner.js:9051:10)
+    at MappingPromiseArray._asyncInit (http://localhost:3000/__cypress/runner/cypress_runner.js:7854:10)
+    at _drainQueueStep (http://localhost:3000/__cypress/runner/cypress_runner.js:5476:12)
+    at _drainQueue (http://localhost:3000/__cypress/runner/cypress_runner.js:5465:9)
+    at Async.../../node_modules/bluebird/js/release/async.js.Async._drainQueues (http://localhost:3000/__cypress/runner/cypress_runner.js:5481:5)
+    at Async.drainQueues (http://localhost:3000/__cypress/runner/cypress_runner.js:5351:14)
+From Your Spec Code:
+    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress/integration/ApiStatus.spec.jsx:139:8)]]></failure>
+    </testcase>
+    <testcase name="API Status counts down until next retry" time="0.0000" classname="counts down until next retry">
+      <failure message="`cy.wait()` could not find a registered alias for: `@status`.
+You have not aliased anything yet." type="CypressError"><![CDATA[CypressError: `cy.wait()` could not find a registered alias for: `@status`.
+You have not aliased anything yet.
+    at aliasNotFoundFor (http://localhost:3000/__cypress/runner/cypress_runner.js:151590:22)
+    at $Cy.getAlias (http://localhost:3000/__cypress/runner/cypress_runner.js:151553:7)
+    at waitForXhr (http://localhost:3000/__cypress/runner/cypress_runner.js:161338:23)
+    at http://localhost:3000/__cypress/runner/cypress_runner.js:161469:14
+    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:10765:23)
+    at MappingPromiseArray._promiseFulfilled (http://localhost:3000/__cypress/runner/cypress_runner.js:7885:38)
+    at MappingPromiseArray.PromiseArray._iterate (http://localhost:3000/__cypress/runner/cypress_runner.js:9087:31)
+    at MappingPromiseArray.init (http://localhost:3000/__cypress/runner/cypress_runner.js:9051:10)
+    at MappingPromiseArray._asyncInit (http://localhost:3000/__cypress/runner/cypress_runner.js:7854:10)
+    at _drainQueueStep (http://localhost:3000/__cypress/runner/cypress_runner.js:5476:12)
+    at _drainQueue (http://localhost:3000/__cypress/runner/cypress_runner.js:5465:9)
+    at Async.../../node_modules/bluebird/js/release/async.js.Async._drainQueues (http://localhost:3000/__cypress/runner/cypress_runner.js:5481:5)
+    at Async.drainQueues (http://localhost:3000/__cypress/runner/cypress_runner.js:5351:14)
+From Your Spec Code:
+    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress/integration/ApiStatus.spec.jsx:144:8)]]></failure>
+    </testcase>
+    <testcase name="API Status hides offline alert when api is back online" time="0.0000" classname="hides offline alert when api is back online">
+      <failure message="`cy.wait()` could not find a registered alias for: `@status`.
+You have not aliased anything yet." type="CypressError"><![CDATA[CypressError: `cy.wait()` could not find a registered alias for: `@status`.
+You have not aliased anything yet.
+    at aliasNotFoundFor (http://localhost:3000/__cypress/runner/cypress_runner.js:151590:22)
+    at $Cy.getAlias (http://localhost:3000/__cypress/runner/cypress_runner.js:151553:7)
+    at waitForXhr (http://localhost:3000/__cypress/runner/cypress_runner.js:161338:23)
+    at http://localhost:3000/__cypress/runner/cypress_runner.js:161469:14
+    at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:10765:23)
+    at MappingPromiseArray._promiseFulfilled (http://localhost:3000/__cypress/runner/cypress_runner.js:7885:38)
+    at MappingPromiseArray.PromiseArray._iterate (http://localhost:3000/__cypress/runner/cypress_runner.js:9087:31)
+    at MappingPromiseArray.init (http://localhost:3000/__cypress/runner/cypress_runner.js:9051:10)
+    at MappingPromiseArray._asyncInit (http://localhost:3000/__cypress/runner/cypress_runner.js:7854:10)
+    at _drainQueueStep (http://localhost:3000/__cypress/runner/cypress_runner.js:5476:12)
+    at _drainQueue (http://localhost:3000/__cypress/runner/cypress_runner.js:5465:9)
+    at Async.../../node_modules/bluebird/js/release/async.js.Async._drainQueues (http://localhost:3000/__cypress/runner/cypress_runner.js:5481:5)
+    at Async.drainQueues (http://localhost:3000/__cypress/runner/cypress_runner.js:5351:14)
+From Your Spec Code:
+    at Context.eval (http://localhost:3000/__cypress/tests?p=cypress/integration/ApiStatus.spec.jsx:157:8)]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

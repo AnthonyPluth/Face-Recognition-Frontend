@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="10.7310" tests="3" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-03-19T21:49:47" tests="0" file="cypress/integration/RegistrationCard.spec.jsx" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="Registration Card" timestamp="2021-03-19T21:49:47" tests="3" time="10.7310" failures="0">
+    <testcase name="Registration Card throws validation error if name not entered" time="1.1320" classname="throws validation error if name not entered">
+    </testcase>
+    <testcase name="Registration Card starts recording if name provided" time="0.5960" classname="starts recording if name provided">
+    </testcase>
+    <testcase name="Registration Card test training model" time="9.0030" classname="test training model">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -1,44 +1,43 @@
 /// <reference types="cypress" />
 
 context("API Status", () => {
-  Cypress.Commands.add("requestsCount", (alias) =>
-    cy
-      .wrap()
-      .then(
-        () => cy.state("requests").filter((req) => req.alias === alias).length
-      )
-  );
-
-  beforeEach(() => {
-    cy.server();
-
-    cy.route({
-      url: "/status",
-    }).as("status");
-  });
+  const getAliasCount = (alias) => {
+    // implementation details, use at your own risk
+    const testRoutes = cy.state('routes')
+    const aliasRoute = Cypress._.find(testRoutes, { alias })
+  
+    if (!aliasRoute) {
+      return
+    }
+  
+    return Cypress._.keys(aliasRoute.requests || {}).length
+  }
 
   it("checks if api is available on loading", () => {
-    cy.route({
-      url: "/status",
-      response: {
-        status: "up",
-        tensorflowGpu: false,
-        tensorflowVersion: "1.15.3",
-      },
+    cy.intercept("/status", {
+      status: "up",
+      tensorflowGpu: false,
+      tensorflowVersion: "1.15.3"
     }).as("status");
 
     cy.visit(Cypress.config("baseUrl"));
-    cy.wait(["@status"]);
-    cy.requestsCount("status").should("be.greaterThan", 0);
-  });
+    cy.wait(["@status"])
+      .then(() => {
+        expect(getAliasCount('status')).to.be.greaterThan(0)
+      })
+  })
 
   it("shows offline alert if api is offline", () => {
+    cy.intercept("/status").as("status");
+
     cy.visit(Cypress.config("baseUrl"));
     cy.wait(["@status"]);
     cy.get("[data-testid=offlineAlert]").should("exist");
   });
 
   it("counts down until next retry", () => {
+    cy.intercept("/status").as("status");
+
     cy.visit(Cypress.config("baseUrl"));
     cy.wait(["@status"]);
     cy.get("[data-testid=offlineAlert]").should("exist");
@@ -56,18 +55,16 @@ context("API Status", () => {
   });
 
   it("hides offline alert when api is back online", () => {
+    cy.intercept("/status").as("status");
     cy.visit(Cypress.config("baseUrl"));
     cy.wait(["@status"]);
     cy.get("[data-testid=offlineAlert]").should("exist");
     cy.get(".MuiAlert-message").should("contain", "trying again in ");
 
-    cy.route({
-      url: "/status",
-      response: {
-        status: "up",
-        tensorflowGpu: false,
-        tensorflowVersion: "1.15.3",
-      },
+    cy.intercept('GET', "/status", {
+      status: "up",
+      tensorflowGpu: false,
+      tensorflowVersion: "1.15.3"
     }).as("status");
 
     // wait for next ping to endpoint
