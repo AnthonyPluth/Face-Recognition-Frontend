@@ -52,7 +52,8 @@ install:
 
 build:
   stage: build
-  needs: ["install"]
+  dependencies:
+    - install
   script:
     - npm run build
   artifacts:
