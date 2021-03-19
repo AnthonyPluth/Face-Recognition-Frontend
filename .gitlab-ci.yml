@@ -13,9 +13,8 @@ stages:
 cache:
   key: shared-cache
   paths:
-    - .npm
-    - cache/Cypress
-    - node_modules
+    - cache/Cypress/
+    - node_modules/
 
 code_quality:
   artifacts:
@@ -29,7 +28,7 @@ services:
   - docker:19.03.11-dind
 
 variables:
-  CYPRESS_CACHE_FOLDER: "cache/Cypress"
+  CYPRESS_CACHE_FOLDER: "cache/Cypress/"
 
 ###############################################################################
 
@@ -41,12 +40,10 @@ install:
     - changes:
         - package-lock.json
     - exists:
-        - node_modules
+        - node_modules/
       when: never
   cache:
     key: shared-cache
-    paths:
-      - node_modules/
 
 ###############################################################################
 
@@ -60,6 +57,9 @@ build:
     paths:
       - build
     expire_in: 30 mins
+  rules:
+    - exists:
+        - node_modules/
 
 ###############################################################################
 
