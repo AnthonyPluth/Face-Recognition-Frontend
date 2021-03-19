@@ -12,6 +12,7 @@ cache:
   key: global_face_rec
   untracked: true
   paths:
+    - build/
     - node_modules/
     - cache/Cypress/
 
@@ -33,7 +34,7 @@ install:
   stage: install
   image: node:latest
   cache:
-    key: global_face_rec
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
       - node_modules/
   script:
@@ -50,7 +51,7 @@ build:
   image: node:latest
   cache:
     policy: pull
-    key: global_face_rec
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
       - node_modules/
   script:
@@ -66,7 +67,7 @@ test:
   stage: test
   cache:
     policy: pull
-    key: global_face_rec
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
       - node_modules/
       - cache/Cypress/
