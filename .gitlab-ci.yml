@@ -2,23 +2,19 @@ include:
   - template: Secret-Detection.gitlab-ci.yml
 
 stages:
-  - secret_detection
   - install
   - build
+  - secret_detection
   - test
   - deploy
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  untracked: true
-  paths:
-    - .npm
-    - node_modules/
-    - cache/Cypress/
+secret_detection:
+  variables:
+    SECRET_DETECTION_HISTORIC_SCAN: "true"
 
 services:
   - docker:19.03.11-dind
-    
+
 variables:
   CYPRESS_CACHE_FOLDER: "cache/Cypress"
   DOCKER_HOST: tcp://docker:2376
@@ -26,38 +22,47 @@ variables:
 
 ###############################################################################
 
-secret_detection:
-  variables:
-    SECRET_DETECTION_HISTORIC_SCAN: "true"
-
-###############################################################################
-
 install:
   stage: install
   image: node:latest
-  script:
-    - npm ci
-  artifacts:
+  cache:
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
       - node_modules/
-      
+  script:
+    - npm ci
+  only:
+    changes:
+      - package-lock.json
+
 ###############################################################################
 
 build:
   stage: build
-  needs: ["install"]
+  # needs: ["install"]
   image: node:latest
+  cache:
+    policy: pull
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - node_modules/
   script:
     - npm run build
   artifacts:
     paths:
       - build
     expire_in: 60 mins
-    
+
 ###############################################################################
 
 test:
   stage: test
+  cache:
+    policy: pull
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - node_modules/
+      - cache/Cypress/
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
     - npm install cypress
@@ -76,8 +81,8 @@ test:
 
 pages:
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   dependencies:
     - test
   script:
@@ -88,19 +93,25 @@ pages:
       - public
     expire_in: 30 days
 
+###############################################################################
+
 deploy-nginx:
   image: docker:19.03.11
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   dependencies:
     - build
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script: 
+  script:
     - docker pull $CI_REGISTRY_IMAGE/nginx:latest || true
     - docker build --cache-from $CI_REGISTRY_IMAGE/nginx:latest --tag $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE/nginx:latest .
     - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/nginx:latest
 
+    # - docker build --pull -t "$CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA" -f "Dockerfile" .
+    # - docker tag "$REGISTRY_URL/nginx:$CI_COMMIT_SHA" "$REGISTRY_URL/nginx:latest"
+    # - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
+    # - docker push $CI_REGISTRY_IMAGE/nginx:latest
 ###############################################################################
