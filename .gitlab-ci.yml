@@ -39,6 +39,7 @@ install:
 build:
   stage: build
   image: node:latest
+  needs: ["install"]
   cache:
     policy: pull
     key: global_face_rec
