@@ -12,7 +12,7 @@ cache:
   key: shared-cache
   paths:
     - .npm
-    - cache/Cypress
+    - /root/.cache/Cypress
     - node_modules
 
 code_quality:
@@ -28,7 +28,7 @@ services:
 
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
-  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+  CYPRESS_CACHE_FOLDER: "cache/Cypress"
 
 ###############################################################################
 
