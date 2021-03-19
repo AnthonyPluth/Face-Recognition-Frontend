@@ -1,12 +1,23 @@
 include:
   - template: Secret-Detection.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
 
 stages:
   - install
   - build
-  - secret_detection
   - test
   - deploy
+
+cache:
+  key: shared-cache
+  paths:
+    - .npm
+    - cache/Cypress
+    - node_modules
+
+code_quality:
+  artifacts:
+    paths: [gl-code-quality-report.json]
 
 secret_detection:
   variables:
@@ -16,7 +27,8 @@ services:
   - docker:19.03.11-dind
 
 variables:
-  CYPRESS_CACHE_FOLDER: "cache/Cypress"
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
 
@@ -24,7 +36,7 @@ variables:
 
 install:
   stage: install
-  image: node:latest
+  image: cypress/base:14
   cache:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -63,19 +75,20 @@ test:
     paths:
       - node_modules/
       - cache/Cypress/
-  image: cypress/browsers:node12.18.0-chrome83-ff77
+  image: cypress/browsers:chrome69
   script:
-    - npm install cypress
-    - npm run cypress:verify
     - NODE_ENV=test npm run test_gitlab
     - npm run coverage
   artifacts:
     when: always
-    paths:
-      - cypress/videos/*.mp4
-      - cypress/screenshots/*.png
-      - coverage/
     expire_in: 10 days
+    paths:
+      - cypress/videos/
+      - cypress/screenshots/
+      - coverage/
+    reports:
+      junit:
+        - results/TEST-*.xml
 
 ###############################################################################
 
@@ -96,7 +109,7 @@ pages:
 ###############################################################################
 
 deploy-nginx:
-  image: docker:19.03.11
+  image: docker:latest
   stage: deploy
   # only:
   #   - master
@@ -110,8 +123,4 @@ deploy-nginx:
     - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/nginx:latest
 
-    # - docker build --pull -t "$CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA" -f "Dockerfile" .
-    # - docker tag "$REGISTRY_URL/nginx:$CI_COMMIT_SHA" "$REGISTRY_URL/nginx:latest"
-    # - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
-    # - docker push $CI_REGISTRY_IMAGE/nginx:latest
 ###############################################################################

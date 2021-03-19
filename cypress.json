@@ -2,5 +2,9 @@
   "projectId": "6jytyp",
   "baseUrl": "http://localhost:3000",
   "testFiles": "**/*.spec.{js,jsx}",
-  "video": true
+  "video": true,
+  "reporter": "junit",
+  "reporterOptions": {
+      "mochaFile": "results/TEST-[hash].xml"
+      }
 }
