@@ -12,7 +12,7 @@ cache:
   key: shared-cache
   paths:
     - .npm
-    - /root/.cache/Cypress
+    - cache/Cypress
     - node_modules
 
 code_quality:
@@ -27,7 +27,6 @@ services:
   - docker:19.03.11-dind
 
 variables:
-  npm_config_cache: "$CI_PROJECT_DIR/.npm"
   CYPRESS_CACHE_FOLDER: "cache/Cypress"
 
 ###############################################################################
@@ -75,6 +74,7 @@ test:
       - cache/Cypress/
   image: cypress/browsers:chrome69
   script:
+    - npm run cypress:verify
     - NODE_ENV=test npm run test_gitlab
     - npm run coverage
   artifacts:

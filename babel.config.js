@@ -6,14 +6,14 @@ module.exports = (api) => {
           "istanbul",
           {
             include: ["src/**/*.{js,jsx}"],
-            exclude: ["**/*.spec.{js,jsx}"],
-          },
-        ],
-      ],
+            exclude: ["**/*.spec.{js,jsx}"]
+          }
+        ]
+      ]
     };
   }
   return {
     presets: ["react-app"],
-    plugins: ["transform-class-properties"],
+    plugins: ["transform-class-properties"]
   };
 };
