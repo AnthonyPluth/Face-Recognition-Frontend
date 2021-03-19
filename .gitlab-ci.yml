@@ -57,9 +57,6 @@ build:
     paths:
       - build
     expire_in: 30 mins
-  rules:
-    - exists:
-        - node_modules/
 
 ###############################################################################
 
