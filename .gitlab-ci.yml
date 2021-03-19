@@ -1,3 +1,5 @@
+image: cybress/base:14
+
 include:
   - template: Secret-Detection.gitlab-ci.yml
   - template: Code-Quality.gitlab-ci.yml
@@ -33,28 +35,24 @@ variables:
 
 install:
   stage: install
-  image: cypress/base:14
-  cache:
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - node_modules/
   script:
     - npm ci
-  only:
-    changes:
-      - package-lock.json
+  rules:
+    - changes:
+        - package-lock.json
+    - exists:
+        - node_modules
+      when: never
+  cache:
+    key: shared-cache
+    paths:
+      - node_modules/
 
 ###############################################################################
 
 build:
   stage: build
-  # needs: ["install"]
-  image: node:latest
-  cache:
-    policy: pull
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - node_modules/
+  needs: ["install"]
   script:
     - npm run build
   artifacts:
@@ -66,12 +64,6 @@ build:
 
 test:
   stage: test
-  cache:
-    policy: pull
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - node_modules/
-      - cache/Cypress/
   image: cypress/browsers:chrome69
   script:
     - npm run cypress:verify
@@ -92,6 +84,7 @@ test:
 
 pages:
   stage: deploy
+  image: alpine:latest
   # only:
   #   - master
   dependencies:
