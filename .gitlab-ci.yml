@@ -58,7 +58,7 @@ build:
   artifacts:
     paths:
       - build
-    expire_in: 60 mins
+    expire_in: 30 mins
 
 ###############################################################################
 
