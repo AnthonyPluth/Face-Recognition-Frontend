@@ -1,0 +1,18 @@
+{
+  "gitlabci": {
+    "fileMatch": [
+      "^\\.gitlab/ci/.*\\.yml$"
+    ]
+  },
+  "gitLabAutomerge": true,
+  "labels": ["dependencies"],
+  "packageRules": [{
+      "matchPackagePatterns": ["eslint"],
+      "labels": ["linting"]
+    },
+    {
+      "matchDepTypes": ["optionalDependencies"],
+      "addLabels": ["optional"]
+    }
+  ]
+}
