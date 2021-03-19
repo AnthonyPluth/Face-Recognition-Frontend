@@ -1,4 +1,4 @@
-image: cybress/base:14
+image: cypress/base:14
 
 include:
   - template: Secret-Detection.gitlab-ci.yml
