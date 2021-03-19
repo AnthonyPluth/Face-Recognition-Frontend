@@ -37,11 +37,11 @@ install:
   script:
     - npm ci
   rules:
-    - changes:
-        - package-lock.json
     - exists:
         - node_modules/
       when: never
+    - changes:
+        - package-lock.json
   cache:
     key: shared-cache
 
@@ -86,10 +86,10 @@ test:
 pages:
   stage: deploy
   image: alpine:latest
-  # only:
-  #   - master
   dependencies:
     - test
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
   script:
     - rm -rf public/*
     - cp -r coverage/* public/
@@ -103,10 +103,10 @@ pages:
 deploy-nginx:
   image: docker:latest
   stage: deploy
-  # only:
-  #   - master
   dependencies:
     - build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
   variables:
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: "/certs"
