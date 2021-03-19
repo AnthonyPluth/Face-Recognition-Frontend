@@ -2,9 +2,9 @@ include:
   - template: Secret-Detection.gitlab-ci.yml
 
 stages:
-  - secret_detection
   - install
   - build
+  - secret_detection
   - test
   - deploy
 
