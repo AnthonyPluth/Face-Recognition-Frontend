@@ -20,7 +20,6 @@ services:
 
 variables:
   CYPRESS_CACHE_FOLDER: "cache/Cypress"
-  DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
 
 ###############################################################################
@@ -33,7 +32,6 @@ secret_detection:
 
 install:
   stage: install
-  needs: ["secret_detection"]
   image: node:latest
   script:
     - npm ci
@@ -45,7 +43,7 @@ install:
 
 build:
   stage: build
-  needs: ["install", "secret_detection"]
+  needs: ["install"]
   image: node:latest
   script:
     - npm run build
