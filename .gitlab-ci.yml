@@ -1,17 +1,13 @@
-include:
-  - template: Secret-Detection.gitlab-ci.yml
-
 stages:
-  - secret_detection
   - install
   - build
   - test
   - deploy
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
+  key: global_face_rec
+  untracked: true
   paths:
-    - .npm
     - node_modules/
     - cache/Cypress/
 
@@ -20,23 +16,16 @@ services:
 
 variables:
   CYPRESS_CACHE_FOLDER: "cache/Cypress"
+  DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
-
-before_script:
-  - npm ci --cache .npm --prefer-offline
-
-###############################################################################
-
-secret_detection:
-  variables:
-    SECRET_DETECTION_HISTORIC_SCAN: "true"
 
 ###############################################################################
 
 install:
   stage: install
+  image: node:latest
   cache:
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: global_face_rec
     paths:
       - node_modules/
   script:
@@ -51,10 +40,10 @@ build:
   stage: build
   image: node:latest
   cache:
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    policy: pull
+    key: global_face_rec
     paths:
       - node_modules/
-    policy: pull
   script:
     - npm run build
   artifacts:
@@ -66,6 +55,12 @@ build:
 
 test:
   stage: test
+  cache:
+    policy: pull
+    key: global_face_rec
+    paths:
+      - node_modules/
+      - cache/Cypress/
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
     - npm install cypress
@@ -108,9 +103,13 @@ deploy-nginx:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA" -f "Dockerfile" .
-    - docker tag "$REGISTRY_URL/nginx:$CI_COMMIT_SHA" "$REGISTRY_URL/nginx:latest"
+    - docker pull $CI_REGISTRY_IMAGE/nginx:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE/nginx:latest --tag $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE/nginx:latest .
     - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/nginx:latest
 
+    # - docker build --pull -t "$CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA" -f "Dockerfile" .
+    # - docker tag "$REGISTRY_URL/nginx:$CI_COMMIT_SHA" "$REGISTRY_URL/nginx:latest"
+    # - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
+    # - docker push $CI_REGISTRY_IMAGE/nginx:latest
 ###############################################################################
