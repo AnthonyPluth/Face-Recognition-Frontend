@@ -8,14 +8,6 @@ stages:
   - test
   - deploy
 
-cache:
-  key: global_face_rec
-  untracked: true
-  paths:
-    - build/
-    - node_modules/
-    - cache/Cypress/
-
 secret_detection:
   variables:
     SECRET_DETECTION_HISTORIC_SCAN: "true"
