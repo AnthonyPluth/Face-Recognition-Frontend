@@ -49,8 +49,6 @@ install:
 
 build:
   stage: build
-  needs:
-    - install
   script:
     - npm run build
   artifacts:
