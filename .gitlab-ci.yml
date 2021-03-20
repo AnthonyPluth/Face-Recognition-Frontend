@@ -39,7 +39,7 @@ before_script:
 build:
   stage: build
   script:
-    - npm run build
+    - yarn build
   artifacts:
     paths:
       - build
@@ -53,9 +53,9 @@ test:
   script:
     - apt-get update
     - apt-get install -y libgbm-dev
-    - npm run cypress:verify
+    - yarn run cypress:verify
     - NODE_ENV=test npm run test_gitlab
-    - npm run coverage
+    - yarn run coverage
   artifacts:
     when: always
     expire_in: 10 days
