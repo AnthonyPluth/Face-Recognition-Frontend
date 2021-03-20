@@ -35,7 +35,7 @@ variables:
 install:
   stage: install
   script:
-    - npm ci
+    - npm ci --also=dev
   rules:
     - exists:
         - node_modules/
