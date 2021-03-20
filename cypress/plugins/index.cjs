@@ -1,8 +1,10 @@
-import babelrc from '@cypress/code-coverage/use-babelrc';
+/**
+ * @type {Cypress.PluginConfig}
+ */
 
-module.exports = (on, config) => {
+ module.exports = (on, config) => {
   require("@cypress/code-coverage/task")(on, config);
-  on("file:preprocessor", babelrc);
+  on("file:preprocessor", require("@cypress/code-coverage/use-babelrc"));
 
   return config;
 };
