@@ -30,25 +30,10 @@ services:
 variables:
   CYPRESS_CACHE_FOLDER: "cache/Cypress/"
 
-###############################################################################
-
-# install:
-#   stage: install
-#   script:
-#     - npm ci --also=dev
-#   # rules:
-#   #   - exists:
-#   #       - node_modules/
-#   #     when: never
-#   #   - changes:
-#   #       - package-lock.json
-#   cache:
-#     key: shared-cache
-
 # ###############################################################################
 
 before_script:
-  - npm ci --cache node_modules --prefer-offline
+  - npm ci --cache node_modules --cache .npm --prefer-offline
 
 build:
   stage: build
@@ -65,6 +50,8 @@ test:
   stage: test
   image: cypress/browsers:chrome69
   script:
+    - apt-get update
+    - apt-get install -y libgbm-dev
     - npm run cypress:verify
     - NODE_ENV=test npm run test_gitlab
     - npm run coverage
