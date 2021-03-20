@@ -36,12 +36,12 @@ install:
   stage: install
   script:
     - npm ci --also=dev
-  rules:
-    - exists:
-        - node_modules/
-      when: never
-    - changes:
-        - package-lock.json
+  # rules:
+  #   - exists:
+  #       - node_modules/
+  #     when: never
+  #   - changes:
+  #       - package-lock.json
   cache:
     key: shared-cache
 
