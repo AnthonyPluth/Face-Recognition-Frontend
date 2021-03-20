@@ -13,6 +13,7 @@ stages:
 cache:
   key: shared-cache
   paths:
+    - .yarn
     - cache/Cypress/
     - node_modules/
 
@@ -33,7 +34,7 @@ variables:
 # ###############################################################################
 
 before_script:
-  - npm ci --cache node_modules --cache .npm --prefer-offline
+  - yarn install --pure-lockfile --prefer-offline --cache-folder .yarn
 
 build:
   stage: build
