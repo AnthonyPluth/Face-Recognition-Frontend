@@ -17,7 +17,7 @@
     "start-server-and-test": "1.11.0"
   },
   "scripts": {
-    "build": "NODE_ENV=production CI=false react-scripts build",
+    "build": "NODE_ENV=production CI=true react-scripts build",
     "coverage": "nyc report --nycrc-path=.nycrc.json --reporter=text-summary",
     "coverage:html": "nyc report --nycrc-path=.nycrc.json --reporter=html",
     "cypress:open": "cypress open",
