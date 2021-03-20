@@ -32,20 +32,23 @@ variables:
 
 ###############################################################################
 
-install:
-  stage: install
-  script:
-    - npm ci --also=dev
-  # rules:
-  #   - exists:
-  #       - node_modules/
-  #     when: never
-  #   - changes:
-  #       - package-lock.json
-  cache:
-    key: shared-cache
+# install:
+#   stage: install
+#   script:
+#     - npm ci --also=dev
+#   # rules:
+#   #   - exists:
+#   #       - node_modules/
+#   #     when: never
+#   #   - changes:
+#   #       - package-lock.json
+#   cache:
+#     key: shared-cache
 
-###############################################################################
+# ###############################################################################
+
+before_script:
+  - npm ci --cache node_modules --prefer-offline
 
 build:
   stage: build
