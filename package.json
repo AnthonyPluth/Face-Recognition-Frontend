@@ -14,7 +14,8 @@
     "react-dom": "16.13.1",
     "react-scripts": "4.0.3",
     "react-webcam": "5.2.3",
-    "start-server-and-test": "1.12.1"
+    "start-server-and-test": "1.12.1",
+    "yarn": "1.22.10"
   },
   "scripts": {
     "build": "NODE_ENV=production CI=true react-scripts build",
