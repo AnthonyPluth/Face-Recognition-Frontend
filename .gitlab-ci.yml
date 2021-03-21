@@ -33,12 +33,10 @@ variables:
 
 # ###############################################################################
 
-before_script:
-  - yarn install --pure-lockfile --prefer-offline --cache-folder .yarn
-
 build:
   stage: build
   script:
+    - yarn install --pure-lockfile --prefer-offline --cache-folder .yarn
     - yarn build
   artifacts:
     paths:
