@@ -47,7 +47,7 @@ build:
 
 test:
   stage: test
-  image: cypress/browsers:node14.7.0-chrome84
+  image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
     - apt-get update
     - apt-get install -y libgbm-dev
