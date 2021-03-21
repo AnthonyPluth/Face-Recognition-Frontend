@@ -13,9 +13,9 @@ stages:
 cache:
   key: shared-cache
   paths:
-    - .yarn
-    - cache/Cypress/
+    - .npm
     - node_modules/
+    - cache/Cypress/
 
 code_quality:
   artifacts:
@@ -57,10 +57,8 @@ build:
 
 test:
   stage: test
-  image: cypress/browsers:node14.16.0-chrome89-ff86
+  image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
-    # - apt-get update
-    # - apt-get install -y libgbm-dev
     - npm install cypress
     - npm run cypress:verify
     - NODE_ENV=test npm run test_gitlab
