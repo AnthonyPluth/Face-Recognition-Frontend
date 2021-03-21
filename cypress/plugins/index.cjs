@@ -1,10 +1,11 @@
-/**
- * @type {Cypress.PluginConfig}
- */
+module.exports = (on, config) => {
+  // custom tasks for sending and reporting code coverage
+  on('task', require('@cypress/code-coverage/task'))
 
- module.exports = (on, config) => {
-  require("@cypress/code-coverage/task")(on, config);
-  on("file:preprocessor", require("@cypress/code-coverage/use-babelrc"));
 
-  return config;
-};
+  // this line instruments spec files and loaded unit test code
+  on(
+    'file:preprocessor',
+    require('@cypress/code-coverage/use-browserify-istanbul')
+  )
+}
