@@ -7,6 +7,12 @@ stages:
   - test
   - deploy
 
+cache:
+  key: shared-cache
+  paths:
+    - node_modules/
+    - cache/Cypress/
+
 secret_detection:
   variables:
     SECRET_DETECTION_HISTORIC_SCAN: "true"
@@ -24,12 +30,8 @@ variables:
 install:
   stage: install
   image: node:latest
-  cache:
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - node_modules/
   script:
-    - npm ci
+    - yarn install
   # only:
   #   changes:
   #     - package-lock.json
@@ -39,13 +41,8 @@ install:
 build:
   stage: build
   image: node:latest
-  cache:
-    policy: pull
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - node_modules/
   script:
-    - npm run build
+    - yarn run build
   artifacts:
     paths:
       - build
@@ -55,18 +52,12 @@ build:
 
 test:
   stage: test
-  cache:
-    policy: pull
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - node_modules/
-      - cache/Cypress/
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
-    - npm install cypress
-    - npm run cypress:verify
-    - NODE_ENV=test npm run test_gitlab
-    - npm run coverage
+    - yarn install cypress
+    - yarn cypress:verify
+    - NODE_ENV=test yarn test_gitlab
+    - yarn coverage
   artifacts:
     when: always
     paths:
@@ -108,8 +99,4 @@ deploy-nginx:
     - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/nginx:latest
 
-    # - docker build --pull -t "$CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA" -f "Dockerfile" .
-    # - docker tag "$REGISTRY_URL/nginx:$CI_COMMIT_SHA" "$REGISTRY_URL/nginx:latest"
-    # - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
-    # - docker push $CI_REGISTRY_IMAGE/nginx:latest
 ###############################################################################
