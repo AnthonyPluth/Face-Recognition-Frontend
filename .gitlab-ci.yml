@@ -32,9 +32,9 @@ install:
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
     - yarn install
-  # only:
-  #   changes:
-  #     - yarn.lock
+  only:
+    changes:
+      - yarn.lock
 
 ###############################################################################
 
@@ -69,8 +69,8 @@ test:
 
 pages:
   stage: deploy
-  # only:
-  #   - master
+  only:
+    - master
   dependencies:
     - test
   script:
@@ -86,8 +86,8 @@ pages:
 deploy-nginx:
   image: docker:19.03.11
   stage: deploy
-  # only:
-  #   - master
+  only:
+    - master
   dependencies:
     - build
   before_script:
