@@ -10,6 +10,7 @@ stages:
 cache:
   key: shared-cache
   paths:
+    - .yarn
     - node_modules/
     - cache/Cypress/
 
@@ -31,7 +32,7 @@ install:
   stage: install
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
-    - yarn install
+    - yarn install --cache-folder .yarn --dev
   only:
     changes:
       - yarn.lock
