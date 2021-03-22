@@ -18,7 +18,7 @@ secret_detection:
     SECRET_DETECTION_HISTORIC_SCAN: "true"
 
 services:
-  - docker:19.03.11-dind
+  - docker:19.03.12-dind
 
 variables:
   CYPRESS_CACHE_FOLDER: "cache/Cypress"
@@ -84,7 +84,7 @@ pages:
 ###############################################################################
 
 deploy-nginx:
-  image: docker:19.03.11
+  image: docker:19.03.12
   stage: deploy
   only:
     - master
