@@ -29,18 +29,18 @@ variables:
 
 install:
   stage: install
-  image: node:latest
+  image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
     - yarn install
   # only:
   #   changes:
-  #     - package-lock.json
+  #     - yarn.lock
 
 ###############################################################################
 
 build:
   stage: build
-  image: node:latest
+  image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
     - yarn run build
   artifacts:
@@ -54,7 +54,6 @@ test:
   stage: test
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
-    - yarn install cypress
     - yarn cypress:verify
     - NODE_ENV=test yarn test_gitlab
     - yarn coverage
