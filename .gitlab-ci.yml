@@ -4,7 +4,6 @@ include:
 stages:
   - install
   - build
-  - secret_detection
   - test
   - deploy
 
@@ -31,15 +30,14 @@ install:
       - node_modules/
   script:
     - npm ci
-  only:
-    changes:
-      - package-lock.json
+  # only:
+  #   changes:
+  #     - package-lock.json
 
 ###############################################################################
 
 build:
   stage: build
-  # needs: ["install"]
   image: node:latest
   cache:
     policy: pull
