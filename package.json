@@ -62,7 +62,7 @@
     "history": "5.0.0",
     "istanbul-lib-coverage": "2.0.5",
     "jest-environment-jsdom-sixteen": "1.0.3",
-    "mocha": "8.0.1",
+    "mocha": "8.4.0",
     "nyc": "14.1.1",
     "react-router-dom": "5.2.0"
   },
