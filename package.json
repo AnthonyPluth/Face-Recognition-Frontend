@@ -22,7 +22,10 @@
     "react-dom": "16.13.1",
     "react-scripts": "3.4.1",
     "react-webcam": "5.1.0",
-    "start-server-and-test": "1.11.0"
+    "reconnecting-websocket": "4.4.0",
+    "socket.io-client": "2.3.0",
+    "start-server-and-test": "1.11.0",
+    "websocket": "1.0.31"
   },
   "scripts": {
     "build": "NODE_ENV=production CI=false react-scripts build",

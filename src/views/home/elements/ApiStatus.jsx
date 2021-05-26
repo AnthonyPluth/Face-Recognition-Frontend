@@ -7,6 +7,9 @@ import {
   recordSnapshot,
 } from "../../../helpers/faceRecApi";
 import Countdown from "react-countdown";
+import ReconnectingWebSocket from "reconnecting-websocket";
+
+const rws = new ReconnectingWebSocket("ws://192.168.60.194:8080/");
 
 export default function ApiStatus() {
   const [apiFailureCount, setApiFailureCount] = useState(0);
@@ -22,8 +25,18 @@ export default function ApiStatus() {
     setConfidence,
     setIdentity,
     setBoundingBoxes,
-    setTensorflowGpu,
+    // setTensorflowGpu,
   } = useApiContext();
+
+  rws.addEventListener("message", (wsMessage) => {
+    if (wsMessage !== null) {
+      setApiFailureCount(0);
+    } else {
+      setApiFailureCount(apiFailureCount + 1);
+    }
+
+    handleApiResponse(wsMessage);
+  });
 
   const renderer = ({ seconds }) => {
     if (apiFailed) {
@@ -39,7 +52,7 @@ export default function ApiStatus() {
   const updateApiStatus = async () => {
     const apiResponse = await getApiStatus();
     if (apiResponse !== null) {
-      setTensorflowGpu(apiResponse.tensorflowGpu);
+      // setTensorflowGpu(apiResponse.tensorflowGpu);
       setApiStatus(apiResponse.status);
       setApiFailed(false);
       setApiFailureCount(0);
@@ -51,23 +64,11 @@ export default function ApiStatus() {
   };
 
   const handleRecordedFrame = async (rawFrame) => {
-    const apiResponse = await recordSnapshot(newUserName, rawFrame);
-    if (apiResponse !== null) {
-      setApiFailureCount(0);
-    } else {
-      setApiFailureCount(apiFailureCount + 1);
-    }
-    handleApiResponse(apiResponse);
+    await recordSnapshot(rws, newUserName, rawFrame);
   };
 
   const handleIdentifyFrame = async (rawFrame) => {
-    const apiResponse = await getIdentityFromSnapshot(rawFrame);
-    if (apiResponse !== null) {
-      setApiFailureCount(0);
-    } else {
-      setApiFailureCount(apiFailureCount + 1);
-    }
-    handleApiResponse(apiResponse);
+    await getIdentityFromSnapshot(rws, rawFrame);
   };
 
   const handleApiResponse = (apiResponse) => {
@@ -80,6 +81,7 @@ export default function ApiStatus() {
 
   useEffect(() => {
     // check api status on page load
+    console.log("getting api status");
     updateApiStatus();
   }, []);
 
