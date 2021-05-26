@@ -1,19 +1,19 @@
+include:
+  - template: Secret-Detection.gitlab-ci.yml
+
 stages:
   - install
   - build
   - test
   - deploy
 
-cache:
-  key: global_face_rec
-  untracked: true
-  paths:
-    - node_modules/
-    - cache/Cypress/
+secret_detection:
+  variables:
+    SECRET_DETECTION_HISTORIC_SCAN: "true"
 
 services:
   - docker:19.03.11-dind
-    
+
 variables:
   CYPRESS_CACHE_FOLDER: "cache/Cypress"
   DOCKER_HOST: tcp://docker:2376
@@ -24,24 +24,24 @@ variables:
 install:
   stage: install
   image: node:latest
-  cache: 
-    key: global_face_rec
+  cache:
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
       - node_modules/
   script:
     - npm ci
-  only:
-    changes:
-      - package-lock.json
-      
+  # only:
+  #   changes:
+  #     - package-lock.json
+
 ###############################################################################
 
 build:
   stage: build
   image: node:latest
-  cache: 
+  cache:
     policy: pull
-    key: global_face_rec
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
       - node_modules/
   script:
@@ -50,14 +50,14 @@ build:
     paths:
       - build
     expire_in: 60 mins
-    
+
 ###############################################################################
 
 test:
   stage: test
-  cache: 
+  cache:
     policy: pull
-    key: global_face_rec
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
       - node_modules/
       - cache/Cypress/
@@ -79,8 +79,8 @@ test:
 
 pages:
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   dependencies:
     - test
   script:
@@ -91,19 +91,25 @@ pages:
       - public
     expire_in: 30 days
 
+###############################################################################
+
 deploy-nginx:
   image: docker:19.03.11
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   dependencies:
     - build
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script: 
+  script:
     - docker pull $CI_REGISTRY_IMAGE/nginx:latest || true
     - docker build --cache-from $CI_REGISTRY_IMAGE/nginx:latest --tag $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE/nginx:latest .
     - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/nginx:latest
 
+    # - docker build --pull -t "$CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA" -f "Dockerfile" .
+    # - docker tag "$REGISTRY_URL/nginx:$CI_COMMIT_SHA" "$REGISTRY_URL/nginx:latest"
+    # - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
+    # - docker push $CI_REGISTRY_IMAGE/nginx:latest
 ###############################################################################
