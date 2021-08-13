@@ -1,115 +1,91 @@
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 include:
-  - template: Secret-Detection.gitlab-ci.yml
-
+- template: Secret-Detection.gitlab-ci.yml
+- template: Security/Dependency-Scanning.gitlab-ci.yml
 stages:
-  - install
-  - build
-  - test
-  - deploy
-
+- install
+- build
+- test
+- deploy
 secret_detection:
   variables:
-    SECRET_DETECTION_HISTORIC_SCAN: "true"
-
+    SECRET_DETECTION_HISTORIC_SCAN: 'true'
 services:
-  - docker:19.03.11-dind
-
+- docker:19.03.11-dind
 variables:
-  CYPRESS_CACHE_FOLDER: "cache/Cypress"
+  CYPRESS_CACHE_FOLDER: cache/Cypress
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
-
-###############################################################################
-
 install:
   stage: install
   image: node:latest
   cache:
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: "$CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR"
     paths:
-      - node_modules/
+    - node_modules/
   script:
-    - npm ci
-  # only:
-  #   changes:
-  #     - package-lock.json
-
-###############################################################################
-
+  - npm ci
 build:
   stage: build
   image: node:latest
   cache:
     policy: pull
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: "$CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR"
     paths:
-      - node_modules/
+    - node_modules/
   script:
-    - npm run build
+  - npm run build
   artifacts:
     paths:
-      - build
+    - build
     expire_in: 60 mins
-
-###############################################################################
-
 test:
   stage: test
   cache:
     policy: pull
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: "$CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR"
     paths:
-      - node_modules/
-      - cache/Cypress/
+    - node_modules/
+    - cache/Cypress/
   image: cypress/browsers:node12.18.0-chrome83-ff77
   script:
-    - npm install cypress
-    - npm run cypress:verify
-    - NODE_ENV=test npm run test_gitlab
-    - npm run coverage
+  - npm install cypress
+  - npm run cypress:verify
+  - NODE_ENV=test npm run test_gitlab
+  - npm run coverage
   artifacts:
     when: always
     paths:
-      - cypress/videos/*.mp4
-      - cypress/screenshots/*.png
-      - coverage/
+    - cypress/videos/*.mp4
+    - cypress/screenshots/*.png
+    - coverage/
     expire_in: 10 days
-
-###############################################################################
-
 pages:
   stage: deploy
-  # only:
-  #   - master
   dependencies:
-    - test
+  - test
   script:
-    - rm -rf public/*
-    - cp -r coverage/* public/
+  - rm -rf public/*
+  - cp -r coverage/* public/
   artifacts:
     paths:
-      - public
+    - public
     expire_in: 30 days
-
-###############################################################################
-
 deploy-nginx:
   image: docker:19.03.11
   stage: deploy
-  # only:
-  #   - master
   dependencies:
-    - build
+  - build
   before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE/nginx:latest || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE/nginx:latest --tag $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE/nginx:latest .
-    - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
-    - docker push $CI_REGISTRY_IMAGE/nginx:latest
-
-    # - docker build --pull -t "$CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA" -f "Dockerfile" .
-    # - docker tag "$REGISTRY_URL/nginx:$CI_COMMIT_SHA" "$REGISTRY_URL/nginx:latest"
-    # - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
-    # - docker push $CI_REGISTRY_IMAGE/nginx:latest
-###############################################################################
+  - docker pull $CI_REGISTRY_IMAGE/nginx:latest || true
+  - docker build --cache-from $CI_REGISTRY_IMAGE/nginx:latest --tag $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
+    --tag $CI_REGISTRY_IMAGE/nginx:latest .
+  - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_SHA
+  - docker push $CI_REGISTRY_IMAGE/nginx:latest
