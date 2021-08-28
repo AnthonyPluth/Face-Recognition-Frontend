@@ -16,7 +16,7 @@ secret_detection:
   variables:
     SECRET_DETECTION_HISTORIC_SCAN: 'true'
 services:
-- docker:19.03.11-dind
+- docker:19.03.15-dind
 variables:
   CYPRESS_CACHE_FOLDER: cache/Cypress
   DOCKER_HOST: tcp://docker:2376
@@ -77,7 +77,7 @@ pages:
     - public
     expire_in: 30 days
 deploy-nginx:
-  image: docker:19.03.11
+  image: docker:19.03.15
   stage: deploy
   dependencies:
   - build
