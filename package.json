@@ -54,7 +54,7 @@
   "devDependencies": {
     "@cypress/code-coverage": "3.9.4",
     "@cypress/instrument-cra": "1.1.1",
-    "@testing-library/react": "10.4.2",
+    "@testing-library/react": "12.1.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-plugin-istanbul": "6.0.0",
     "babel-plugin-transform-class-properties": "6.24.1",
